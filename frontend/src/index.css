@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@config "../tailwind.config.cjs";
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-body-md antialiased;
+    min-height: max(884px, 100vh);
+  }
+}
+
+/* Custom Drop Cap for editorial text */
+.drop-cap::first-letter {
+  float: left;
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  line-height: 4rem;
+  padding-top: 0.5rem;
+  padding-right: 0.75rem;
+  color: #1b1c1a;
+  font-weight: 700;
+}
+
+/* Ink Divider matching the HTML mockup */
+.ink-divider {
+  position: relative;
+  height: 1px;
+  background-color: #e4e2de;
+  margin: 4rem 0;
+  text-align: center;
+}
+
+.ink-divider::after {
+  content: '✻';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fbf9f5;
+  padding: 0 1rem;
+  color: #775a19;
+  font-size: 1.25rem;
+}
+
+/* Reading progress bar transition */
+.reading-progress {
+  height: 2px;
+  background: #775a19;
+  width: 0%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transition: width 0.1s ease-out;
+}
+
+/* Scrollbar hiding utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Contextual Toolbar Selection */
+#selection-toolbar {
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Custom placeholder for rich-text editable */
+[contenteditable]:empty:before {
+  content: attr(data-placeholder);
+  color: #c4c7c7;
+  cursor: text;
+}
+
+.ink-input:focus {
+  outline: none;
+  border-bottom-width: 2px;
+  border-color: #1a1a1a;
+}
+
+.reading-bar {
+  height: 2px;
+  background: #775a19;
+  width: 0%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
