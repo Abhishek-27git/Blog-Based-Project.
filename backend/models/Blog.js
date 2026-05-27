@@ -75,38 +75,33 @@ const blogSchema = new Schema(
   { timestamps: true }
 );
 
-// Auto-generate slug from title before saving
+// Pre-save middleware: handles slug, read time, and excerpt auto-generation
 blogSchema.pre("save", async function () {
-  if (!this.isModified("title")) return;
+  // 1. Auto-generate slug from title
+  if (this.isModified("title")) {
+    let baseSlug = slugify(this.title, { lower: true, strict: true });
+    let slug = baseSlug;
+    let count = 1;
 
-  let baseSlug = slugify(this.title, { lower: true, strict: true });
-  let slug = baseSlug;
-  let count = 1;
+    // Ensure slug uniqueness
+    while (await mongoose.model("Blog").findOne({ slug, _id: { $ne: this._id } })) {
+      slug = `${baseSlug}-${count++}`;
+    }
 
-  // Ensure slug uniqueness
-  while (await mongoose.model("Blog").findOne({ slug, _id: { $ne: this._id } })) {
-    slug = `${baseSlug}-${count++}`;
+    this.slug = slug;
   }
 
-  this.slug = slug;
-});
-
-// Auto-calculate read time from content (avg 200 words/min)
-blogSchema.pre("save", function (next) {
+  // 2. Auto-calculate read time from content (avg 200 words/min)
   if (this.isModified("content") && this.content) {
     const wordCount = this.content.replace(/<[^>]+>/g, "").split(/\s+/).length;
     this.readTime = Math.ceil(wordCount / 200);
   }
-  next();
-});
 
-// Auto-generate excerpt if not provided
-blogSchema.pre("save", function (next) {
+  // 3. Auto-generate excerpt if not provided
   if (!this.excerpt && this.content) {
     const plainText = this.content.replace(/<[^>]+>/g, "");
     this.excerpt = plainText.substring(0, 497).trim() + "...";
   }
-  next();
 });
 
 // Indexes for performance

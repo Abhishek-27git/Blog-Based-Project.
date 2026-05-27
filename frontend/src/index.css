@@ -4,23 +4,36 @@
 @layer base {
   body {
     @apply bg-background text-on-surface font-body-md antialiased;
-    min-height: max(884px, 100vh);
+    min-height: 100vh;
+    /* Subtle vertical grid lines for modern architectural layout (4-column grid layout background) */
+    background-image: linear-gradient(
+      to right,
+      rgba(228, 226, 222, 0.25) 1px,
+      transparent 1px
+    );
+    background-size: 25% 100%;
   }
+}
+
+/* Custom Selection style for premium high-contrast feel */
+::selection {
+  background-color: #1b1c1a;
+  color: #fbf9f5;
 }
 
 /* Custom Drop Cap for editorial text */
 .drop-cap::first-letter {
   float: left;
   font-family: 'Playfair Display', serif;
-  font-size: 5rem;
-  line-height: 4rem;
-  padding-top: 0.5rem;
+  font-size: 5.5rem;
+  line-height: 4.5rem;
+  padding-top: 0.25rem;
   padding-right: 0.75rem;
   color: #1b1c1a;
   font-weight: 700;
 }
 
-/* Ink Divider matching the HTML mockup */
+/* Ink Divider matching modern layouts */
 .ink-divider {
   position: relative;
   height: 1px;
@@ -36,42 +49,18 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fbf9f5;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
   color: #775a19;
   font-size: 1.25rem;
 }
 
-/* Reading progress bar transition */
-.reading-progress {
-  height: 2px;
-  background: #775a19;
-  width: 0%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  transition: width 0.1s ease-out;
-}
-
-/* Scrollbar hiding utilities */
+/* Hide scrollbar utilities */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* Contextual Toolbar Selection */
-#selection-toolbar {
-  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-}
-
-/* Custom placeholder for rich-text editable */
-[contenteditable]:empty:before {
-  content: attr(data-placeholder);
-  color: #c4c7c7;
-  cursor: text;
 }
 
 .ink-input:focus {
@@ -88,4 +77,36 @@
   top: 0;
   left: 0;
   z-index: 100;
+}
+
+/* Premium Editorial Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #eae8e4 25%, #f5f3ef 50%, #eae8e4 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Clean Custom Scrollbar matching paper feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fbf9f5;
+}
+::-webkit-scrollbar-thumb {
+  background: #e4e2de;
+  border-radius: 0px; /* square architectural edges */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c4c7c7;
 }
