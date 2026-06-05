@@ -22,7 +22,7 @@ function App() {
       <Router>
         <div className="min-h-screen flex flex-col bg-background text-on-surface">
           <Navbar />
-          
+
           <div className="flex-grow">
             <Routes>
               {/* Public Routes */}

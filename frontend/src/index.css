@@ -1,43 +1,111 @@
 @import "tailwindcss";
 @config "../tailwind.config.cjs";
 
+:root {
+  --color-background: #fbf9f5;
+  --color-surface: #efeeea;
+  --color-surface-container: #efeeea;
+  --color-surface-container-low: #f5f3ef;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #eae8e4;
+  --color-surface-container-highest: #e4e2de;
+  --color-on-surface: #1b1c1a;
+  --color-on-surface-variant: #5a5b5d;
+  --color-primary: #775a19;
+  --color-on-primary: #fbf9f5;
+  --color-secondary: #9b772c;
+  --color-on-secondary: #fbf9f5;
+  --color-secondary-container: #ffdea5;
+  --color-on-secondary-container: #261900;
+  --color-primary-container: #e5e2e1;
+  --color-on-primary-container: #1c1b1b;
+  --color-outline: #c4c7c7;
+  --color-outline-variant: #e4e2de;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #410002;
+  --color-tertiary: #ffdea5;
+  --color-on-tertiary: #261900;
+  --color-tertiary-container: #e5e2e1;
+  --color-on-tertiary-container: #1c1b1b;
+  --color-surface-variant: #e4e2de;
+  --color-inverse-surface: #30312e;
+  --color-inverse-on-surface: #f2f0ed;
+  --grid-color: rgba(18, 19, 20, 0.03);
+}
+
+.dark {
+  --color-background: #0e0f10;
+  --color-surface: #161718;
+  --color-surface-container: #161718;
+  --color-surface-container-low: #121213;
+  --color-surface-container-lowest: #0a0a0b;
+  --color-surface-container-high: #1e1f20;
+  --color-surface-container-highest: #2a2b2d;
+  --color-on-surface: #fbf9f5;
+  --color-on-surface-variant: #9c9b98;
+  --color-primary: #c5a85c;
+  --color-on-primary: #0e0f10;
+  --color-secondary: #fed488;
+  --color-on-secondary: #0e0f10;
+  --color-secondary-container: #2a2b2d;
+  --color-on-secondary-container: #fed488;
+  --color-primary-container: #1a1a1b;
+  --color-on-primary-container: #c5a85c;
+  --color-outline: #262729;
+  --color-outline-variant: #2c2d30;
+  --color-error: #b92b2b;
+  --color-on-error: #fbf9f5;
+  --color-error-container: #3a1616;
+  --color-on-error-container: #ffdad6;
+  --color-tertiary: #fed488;
+  --color-on-tertiary: #0e0f10;
+  --color-tertiary-container: #1a1a1b;
+  --color-on-tertiary-container: #fed488;
+  --color-surface-variant: #1e1f20;
+  --color-inverse-surface: #fbf9f5;
+  --color-inverse-on-surface: #0e0f10;
+  --grid-color: rgba(255, 255, 255, 0.015);
+}
+
 @layer base {
   body {
     @apply bg-background text-on-surface font-body-md antialiased;
     min-height: 100vh;
-    /* Subtle vertical grid lines for modern architectural layout (4-column grid layout background) */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     background-image: linear-gradient(
       to right,
-      rgba(228, 226, 222, 0.25) 1px,
+      var(--grid-color) 1px,
       transparent 1px
     );
     background-size: 25% 100%;
   }
 }
 
-/* Custom Selection style for premium high-contrast feel */
+/* Custom Selection style for Obsidian Literary */
 ::selection {
-  background-color: #1b1c1a;
-  color: #fbf9f5;
+  background-color: #c5a85c;
+  color: #0e0f10;
 }
 
-/* Custom Drop Cap for editorial text */
+/* Custom Drop Cap for DM Sans editorial text */
 .drop-cap::first-letter {
   float: left;
-  font-family: 'Playfair Display', serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 5.5rem;
   line-height: 4.5rem;
   padding-top: 0.25rem;
   padding-right: 0.75rem;
-  color: #1b1c1a;
+  color: #c5a85c;
   font-weight: 700;
 }
 
-/* Ink Divider matching modern layouts */
+/* Ink Divider matching Obsidian layouts */
 .ink-divider {
   position: relative;
   height: 1px;
-  background-color: #e4e2de;
+  background-color: #2c2d30;
   margin: 4rem 0;
   text-align: center;
 }
@@ -48,9 +116,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fbf9f5;
+  background-color: #0e0f10;
   padding: 0 1.5rem;
-  color: #775a19;
+  color: #c5a85c;
   font-size: 1.25rem;
 }
 
@@ -66,12 +134,12 @@
 .ink-input:focus {
   outline: none;
   border-bottom-width: 2px;
-  border-color: #1a1a1a;
+  border-color: #c5a85c;
 }
 
 .reading-bar {
   height: 2px;
-  background: #775a19;
+  background: #c5a85c;
   width: 0%;
   position: fixed;
   top: 0;
@@ -79,7 +147,7 @@
   z-index: 100;
 }
 
-/* Premium Editorial Shimmer Animation */
+/* Premium Obsidian Shimmer Animation */
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -90,23 +158,23 @@
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #eae8e4 25%, #f5f3ef 50%, #eae8e4 75%);
+  background: linear-gradient(90deg, #161718 25%, #1e1f20 50%, #161718 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
 }
 
-/* Clean Custom Scrollbar matching paper feel */
+/* Custom Scrollbar matching Obsidian feel */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #fbf9f5;
+  background: #0e0f10;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e4e2de;
-  border-radius: 0px; /* square architectural edges */
+  background: #262729;
+  border-radius: 0px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #c4c7c7;
+  background: #c5a85c;
 }

@@ -37,8 +37,8 @@ const seedAdmin = async () => {
       name,
       email,
       password,
-      role:       "admin",      // ← the ONLY place role is ever set to "admin"
-      provider:   "local",
+      role: "admin",      // ← the ONLY place role is ever set to "admin"
+      provider: "local",
       isVerified: true,
     });
 

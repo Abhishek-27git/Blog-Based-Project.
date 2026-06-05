@@ -111,9 +111,9 @@ const UserDashboard = () => {
     <div className="min-h-screen flex flex-col md:flex-row bg-background">
       
       {/* Sidebar navigation */}
-      <aside className="w-full md:w-64 border-r border-outline-variant/60 bg-white flex flex-col py-10 px-6">
-        <div className="flex flex-col items-center space-y-3 mb-10 pb-8 border-b border-outline-variant/30 text-center">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-surface-container-highest border border-outline-variant/60 relative">
+      <aside className="w-full md:w-64 border-r border-outline bg-surface flex flex-col py-10 px-6">
+        <div className="flex flex-col items-center space-y-3 mb-10 pb-8 border-b border-outline/30 text-center">
+          <div className="w-16 h-16 rounded-full overflow-hidden bg-surface-container-highest border border-outline relative">
             {user?.avatar ? (
               <img src={user.avatar} alt={user.name} className="w-full h-full object-cover grayscale" />
             ) : (
@@ -123,8 +123,8 @@ const UserDashboard = () => {
             )}
           </div>
           <div className="min-w-0">
-            <p className="font-ui-label text-sm font-bold text-on-surface">{user?.name}</p>
-            <p className="font-ui-small text-[9px] text-on-surface-variant uppercase tracking-widest font-semibold mt-0.5">
+            <p className="font-sans text-sm font-bold text-on-surface">{user?.name}</p>
+            <p className="font-mono text-[8px] text-primary uppercase tracking-widest font-bold mt-0.5">
               {user?.role} Account
             </p>
           </div>
@@ -133,10 +133,10 @@ const UserDashboard = () => {
         <nav className="space-y-2 flex-1">
           <button
             onClick={() => setActiveTab("workspace")}
-            className={`w-full flex items-center space-x-3 px-4 py-3 font-ui-label text-xs uppercase tracking-widest transition-all text-left cursor-pointer border ${
+            className={`w-full flex items-center space-x-3 px-4 py-3 font-sans text-xs uppercase tracking-widest transition-all text-left cursor-pointer border-l-4 ${
               activeTab === "workspace"
-                ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
-                : "border-transparent text-on-surface-variant hover:border-outline-variant"
+                ? "bg-surface-container-high border-primary text-primary font-bold"
+                : "border-transparent text-on-surface-variant hover:bg-surface-container-low"
             }`}
           >
             <span className="material-symbols-outlined text-lg">edit_note</span>
@@ -144,10 +144,10 @@ const UserDashboard = () => {
           </button>
           <button
             onClick={() => setActiveTab("bookmarks")}
-            className={`w-full flex items-center space-x-3 px-4 py-3 font-ui-label text-xs uppercase tracking-widest transition-all text-left cursor-pointer border ${
+            className={`w-full flex items-center space-x-3 px-4 py-3 font-sans text-xs uppercase tracking-widest transition-all text-left cursor-pointer border-l-4 ${
               activeTab === "bookmarks"
-                ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
-                : "border-transparent text-on-surface-variant hover:border-outline-variant"
+                ? "bg-surface-container-high border-primary text-primary font-bold"
+                : "border-transparent text-on-surface-variant hover:bg-surface-container-low"
             }`}
           >
             <span className="material-symbols-outlined text-lg">bookmark</span>
@@ -155,10 +155,10 @@ const UserDashboard = () => {
           </button>
           <button
             onClick={() => setActiveTab("settings")}
-            className={`w-full flex items-center space-x-3 px-4 py-3 font-ui-label text-xs uppercase tracking-widest transition-all text-left cursor-pointer border ${
+            className={`w-full flex items-center space-x-3 px-4 py-3 font-sans text-xs uppercase tracking-widest transition-all text-left cursor-pointer border-l-4 ${
               activeTab === "settings"
-                ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
-                : "border-transparent text-on-surface-variant hover:border-outline-variant"
+                ? "bg-surface-container-high border-primary text-primary font-bold"
+                : "border-transparent text-on-surface-variant hover:bg-surface-container-low"
             }`}
           >
             <span className="material-symbols-outlined text-lg">settings</span>
@@ -173,50 +173,50 @@ const UserDashboard = () => {
         {activeTab === "workspace" && (
           <div>
             
-            {/* Big Metrics Counters Grid matching Reference Image 4 */}
+            {/* Big Metrics Counters Grid matching Image 5 */}
             <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-              <div className="border-b border-outline-variant/60 pb-6 text-left">
-                <span className="font-ui-label text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
+              <div className="border border-outline bg-surface rounded-sm p-6 text-left hover:border-primary/45 transition-colors">
+                <span className="font-mono text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
                   Total views
                 </span>
-                <h2 className="font-display-lg text-4xl md:text-5xl font-bold text-on-surface">
+                <h2 className="font-sans text-4xl md:text-5xl font-black text-on-surface">
                   {totalViews}
                 </h2>
               </div>
-              <div className="border-b border-outline-variant/60 pb-6 text-left">
-                <span className="font-ui-label text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
+              <div className="border border-outline bg-surface rounded-sm p-6 text-left hover:border-primary/45 transition-colors">
+                <span className="font-mono text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
                   Bookmarks
                 </span>
-                <h2 className="font-display-lg text-4xl md:text-5xl font-bold text-on-surface">
+                <h2 className="font-sans text-4xl md:text-5xl font-black text-on-surface">
                   {bookmarks.length}
                 </h2>
               </div>
-              <div className="border-b border-outline-variant/60 pb-6 text-left">
-                <span className="font-ui-label text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
+              <div className="border border-outline bg-surface rounded-sm p-6 text-left hover:border-primary/45 transition-colors">
+                <span className="font-mono text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
                   Published
                 </span>
-                <h2 className="font-display-lg text-4xl md:text-5xl font-bold text-on-surface">
+                <h2 className="font-sans text-4xl md:text-5xl font-black text-on-surface">
                   {publishedBlogs.length}
                 </h2>
               </div>
-              <div className="border-b border-outline-variant/60 pb-6 text-left">
-                <span className="font-ui-label text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
+              <div className="border border-outline bg-surface rounded-sm p-6 text-left hover:border-primary/45 transition-colors">
+                <span className="font-mono text-[9px] text-on-surface-variant uppercase tracking-widest block mb-2 font-bold">
                   Drafts
                 </span>
-                <h2 className="font-display-lg text-4xl md:text-5xl font-bold text-on-surface">
+                <h2 className="font-sans text-4xl md:text-5xl font-black text-on-surface">
                   {draftBlogs.length}
                 </h2>
               </div>
             </section>
 
             {/* Header Title with clean buttons */}
-            <div className="flex justify-between items-center mb-10 pb-4 border-b border-outline-variant/20">
-              <h3 className="font-headline-md text-xl md:text-2xl font-bold text-on-surface">
+            <div className="flex justify-between items-center mb-10 pb-4 border-b border-outline/20">
+              <h3 className="font-sans text-xl md:text-2xl font-bold text-on-surface">
                 Workspace Manuscripts
               </h3>
               <Link
                 to="/new-manuscript"
-                className="bg-primary border border-primary text-on-primary hover:bg-transparent hover:text-primary px-5 py-2 font-ui-label text-xs uppercase tracking-widest flex items-center space-x-2 transition-all"
+                className="bg-primary border border-primary text-on-primary hover:bg-transparent hover:text-primary px-5 py-2 font-sans text-xs uppercase tracking-widest flex items-center space-x-2 transition-all font-bold rounded-sm"
               >
                 <span className="material-symbols-outlined text-sm">add</span>
                 <span>New Manuscript</span>
@@ -226,22 +226,22 @@ const UserDashboard = () => {
             {/* In Progress / Drafts */}
             <section className="mb-16">
               <div className="flex items-center space-x-3 mb-6">
-                <span className="font-ui-label text-[10px] text-secondary uppercase tracking-widest font-bold">
+                <span className="font-mono text-[10px] text-primary uppercase tracking-widest font-bold">
                   Drafts in Progress
                 </span>
-                <div className="flex-grow h-px bg-outline-variant/30"></div>
+                <div className="flex-grow h-px bg-outline"></div>
               </div>
               {draftBlogs.length === 0 ? (
-                <p className="font-body-md text-xs text-on-surface-variant italic text-left py-2">
+                <p className="font-sans text-xs text-on-surface-variant italic text-left py-2">
                   No drafts saved. Keep writing your next story.
                 </p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {draftBlogs.map((blog) => (
-                    <div key={blog._id} className="p-6 border border-outline-variant/60 bg-white flex flex-col justify-between hover:shadow-md transition-all duration-300 group">
+                    <div key={blog._id} className="p-6 border border-outline bg-surface flex flex-col justify-between hover:shadow-md hover:border-primary/30 transition-all duration-300 group rounded-sm">
                       <div>
                         <div className="flex justify-between items-start mb-4">
-                          <span className="font-ui-small text-[9px] px-2.5 py-1 border border-outline-variant/60 text-on-surface-variant uppercase tracking-wider font-bold">
+                          <span className="font-mono text-[8px] px-2.5 py-1 border border-outline text-primary uppercase tracking-wider font-bold">
                             {blog.category}
                           </span>
                           <button
@@ -251,15 +251,15 @@ const UserDashboard = () => {
                             delete
                           </button>
                         </div>
-                        <h4 className="font-display-lg text-base font-bold mb-2 text-left group-hover:text-secondary transition-colors">
+                        <h4 className="font-sans text-base font-bold mb-2 text-left text-on-surface group-hover:text-primary transition-colors">
                           {blog.title || "[ Untitled Draft ]"}
                         </h4>
-                        <p className="font-body-md text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
+                        <p className="font-sans text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
                           {blog.summary || "No summary abstract provided."}
                         </p>
                       </div>
-                      <div className="flex justify-between items-center pt-4 border-t border-outline-variant/20 mt-4">
-                        <span className="font-ui-small text-[9px] uppercase tracking-wider text-on-surface-variant">
+                      <div className="flex justify-between items-center pt-4 border-t border-outline/20 mt-4">
+                        <span className="font-mono text-[9px] uppercase tracking-wider text-on-surface-variant">
                           Edits: {new Date(blog.updatedAt).toLocaleDateString()}
                         </span>
                         <Link
@@ -278,22 +278,22 @@ const UserDashboard = () => {
             {/* Published Essays */}
             <section>
               <div className="flex items-center space-x-3 mb-6">
-                <span className="font-ui-label text-[10px] text-secondary uppercase tracking-widest font-bold">
+                <span className="font-mono text-[10px] text-primary uppercase tracking-widest font-bold">
                   Published Manuscripts
                 </span>
-                <div className="flex-grow h-px bg-outline-variant/30"></div>
+                <div className="flex-grow h-px bg-outline"></div>
               </div>
               {publishedBlogs.length === 0 ? (
-                <p className="font-body-md text-xs text-on-surface-variant italic text-left py-2">
+                <p className="font-sans text-xs text-on-surface-variant italic text-left py-2">
                   No essays published yet. Share your thoughts with the colophon.
                 </p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {publishedBlogs.map((blog) => (
-                    <div key={blog._id} className="p-6 border border-outline-variant/60 bg-white flex flex-col justify-between hover:shadow-md transition-all duration-300 group">
+                    <div key={blog._id} className="p-6 border border-outline bg-surface flex flex-col justify-between hover:shadow-md hover:border-primary/30 transition-all duration-300 group rounded-sm">
                       <div>
                         <div className="flex justify-between items-start mb-4">
-                          <span className="font-ui-small text-[9px] px-2.5 py-1 border border-outline-variant/60 text-on-surface-variant uppercase tracking-wider font-bold">
+                          <span className="font-mono text-[8px] px-2.5 py-1 border border-outline text-primary uppercase tracking-wider font-bold">
                             {blog.category}
                           </span>
                           <button
@@ -304,16 +304,16 @@ const UserDashboard = () => {
                           </button>
                         </div>
                         <Link to={`/post/${blog.slug}`}>
-                          <h4 className="font-display-lg text-base font-bold mb-2 text-left group-hover:text-secondary transition-colors">
+                          <h4 className="font-sans text-base font-bold mb-2 text-left text-on-surface group-hover:text-primary transition-colors">
                             {blog.title}
                           </h4>
                         </Link>
-                        <p className="font-body-md text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
+                        <p className="font-sans text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
                           {blog.summary}
                         </p>
                       </div>
-                      <div className="flex justify-between items-center pt-4 border-t border-outline-variant/20 mt-4">
-                        <span className="font-ui-small text-[9px] uppercase tracking-wider text-on-surface-variant">
+                      <div className="flex justify-between items-center pt-4 border-t border-outline/20 mt-4">
+                        <span className="font-mono text-[9px] uppercase tracking-wider text-on-surface-variant">
                           Published: {new Date(blog.createdAt).toLocaleDateString()}
                         </span>
                         <div className="flex items-center gap-3">
@@ -339,37 +339,37 @@ const UserDashboard = () => {
 
         {activeTab === "bookmarks" && (
           <div>
-            <h3 className="font-headline-md text-xl md:text-2xl font-bold text-on-surface mb-8 pb-3 border-b border-outline-variant/20 text-left">
+            <h3 className="font-sans text-xl md:text-2xl font-bold text-on-surface mb-8 pb-3 border-b border-outline/20 text-left">
               Saved Manuscripts
             </h3>
             {bookmarks.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-outline-variant/60 bg-white flex flex-col justify-center items-center">
+              <div className="text-center py-20 border border-dashed border-outline bg-surface flex flex-col justify-center items-center rounded-sm">
                 <span className="material-symbols-outlined text-3xl text-on-surface-variant mb-2">
                   bookmark
                 </span>
-                <p className="font-body-md text-xs text-on-surface-variant italic">No bookmarked essays found.</p>
+                <p className="font-sans text-xs text-on-surface-variant italic">No bookmarked essays found.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {bookmarks.map((blog) => (
-                  <div key={blog._id} className="p-6 border border-outline-variant/60 bg-white flex flex-col justify-between hover:shadow-md transition-all duration-300 group">
+                  <div key={blog._id} className="p-6 border border-outline bg-surface flex flex-col justify-between hover:shadow-md hover:border-primary/30 transition-all duration-300 group rounded-sm">
                     <div>
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="bg-surface-container-high px-2.5 py-1 font-ui-small text-[9px] border border-outline-variant/60 uppercase tracking-wider font-bold text-on-surface-variant">
+                        <span className="bg-surface-container-high px-2.5 py-1 font-mono text-[8px] border border-outline uppercase tracking-wider font-bold text-primary">
                           {blog.category}
                         </span>
                       </div>
                       <Link to={`/post/${blog.slug}`}>
-                        <h4 className="font-display-lg text-base font-bold mb-2 text-left group-hover:text-secondary transition-colors">
+                        <h4 className="font-sans text-base font-bold mb-2 text-left text-on-surface group-hover:text-primary transition-colors">
                           {blog.title}
                         </h4>
                       </Link>
-                      <p className="font-body-md text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
+                      <p className="font-sans text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
                         {blog.summary}
                       </p>
                     </div>
-                    <div className="flex justify-between items-center pt-4 border-t border-outline-variant/20 mt-4">
-                      <span className="font-ui-small text-[9px] uppercase tracking-wider text-on-surface-variant">
+                    <div className="flex justify-between items-center pt-4 border-t border-outline/20 mt-4">
+                      <span className="font-sans text-[10px] text-on-surface-variant font-semibold">
                         By {blog.author?.name}
                       </span>
                       <Link
@@ -387,27 +387,27 @@ const UserDashboard = () => {
         )}
 
         {activeTab === "settings" && (
-          <div className="max-w-xl text-left bg-white border border-outline-variant/60 p-8 shadow-sm">
-            <h3 className="font-headline-md text-lg font-bold text-on-surface mb-8 pb-3 border-b border-outline-variant/20">
+          <div className="max-w-xl text-left bg-surface border border-outline p-8 shadow-sm rounded-sm">
+            <h3 className="font-sans text-lg font-bold text-on-surface mb-8 pb-3 border-b border-outline/20">
               Profile Configuration
             </h3>
             
             {profileSuccessMsg && (
-              <div className="mb-6 p-4 bg-green-50 text-green-700 text-xs font-ui-label border border-green-200">
+              <div className="mb-6 p-4 bg-green-950/30 text-green-400 text-xs font-sans border border-green-800 rounded-sm">
                 {profileSuccessMsg}
               </div>
             )}
 
             {profileErrorMsg && (
-              <div className="mb-6 p-4 bg-error-container text-on-error-container text-xs font-ui-label border border-error/20">
+              <div className="mb-6 p-4 bg-error-container text-on-error-container text-xs font-sans border border-error/20 rounded-sm">
                 {profileErrorMsg}
               </div>
             )}
 
             <form onSubmit={handleProfileSubmit} className="space-y-6">
               
-              <div className="flex items-center gap-6 pb-6 border-b border-outline-variant/20">
-                <div className="w-16 h-16 rounded overflow-hidden bg-surface-container-highest border border-outline-variant/60 relative">
+              <div className="flex items-center gap-6 pb-6 border-b border-outline/20">
+                <div className="w-16 h-16 rounded overflow-hidden bg-surface-container-highest border border-outline relative">
                   {avatarPreview ? (
                     <img src={avatarPreview} alt="Preview" className="w-full h-full object-cover grayscale" />
                   ) : (
@@ -417,7 +417,7 @@ const UserDashboard = () => {
                   )}
                 </div>
                 <div>
-                  <label className="bg-background border border-outline-variant/60 hover:border-primary text-on-surface px-4 py-1.5 font-ui-label text-[10px] uppercase tracking-widest cursor-pointer inline-block transition-all">
+                  <label className="bg-surface border border-outline hover:border-primary text-on-surface px-4 py-1.5 font-sans text-[10px] uppercase tracking-widest cursor-pointer inline-block transition-all font-bold rounded-sm">
                     Upload Avatar
                     <input
                       type="file"
@@ -426,33 +426,33 @@ const UserDashboard = () => {
                       className="hidden"
                     />
                   </label>
-                  <p className="font-ui-small text-[9px] text-on-surface-variant mt-2 uppercase tracking-wide">
+                  <p className="font-mono text-[9px] text-on-surface-variant mt-2 uppercase tracking-wide">
                     JPG, PNG or GIF. Max 5MB.
                   </p>
                 </div>
               </div>
 
               <div>
-                <label className="block font-ui-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
+                <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
                   Display Name
                 </label>
                 <input
                   type="text"
                   value={profileName}
                   onChange={(e) => setProfileName(e.target.value)}
-                  className="w-full bg-background border border-outline-variant/60 focus:border-primary px-4 py-2.5 text-on-surface font-body-md text-sm outline-none transition-all"
+                  className="w-full bg-white text-zinc-900 rounded-md px-3 py-2 text-xs font-sans outline-none transition-all border border-outline focus:border-primary placeholder:text-zinc-400"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-ui-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
+                <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
                   Author Biography
                 </label>
                 <textarea
                   value={profileBio}
                   onChange={(e) => setProfileBio(e.target.value)}
-                  className="w-full bg-background border border-outline-variant/60 focus:border-primary px-4 py-2.5 text-on-surface font-body-md text-sm h-32 outline-none resize-none transition-all"
+                  className="w-full bg-white text-zinc-900 rounded-md px-3 py-2 text-xs font-sans outline-none transition-all border border-outline focus:border-primary h-32 resize-none placeholder:text-zinc-400"
                   placeholder="Share a short summary of your background, philosophy, or interests..."
                 />
               </div>
@@ -460,7 +460,7 @@ const UserDashboard = () => {
               <button
                 type="submit"
                 disabled={updatingProfile}
-                className="bg-primary text-on-primary px-6 py-3 font-ui-label text-xs uppercase tracking-widest hover:bg-on-surface-variant disabled:opacity-50 transition-all cursor-pointer w-full text-center"
+                className="bg-primary text-on-primary px-6 py-3 font-sans text-xs uppercase tracking-widest hover:bg-secondary disabled:opacity-50 transition-all cursor-pointer w-full text-center font-bold rounded-sm"
               >
                 {updatingProfile ? "Saving..." : "Save Details"}
               </button>

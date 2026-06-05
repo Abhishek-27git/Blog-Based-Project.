@@ -52,29 +52,25 @@ const Register = () => {
   return (
     <div className="bg-background min-h-screen flex flex-col items-center justify-center py-12 px-6">
       
-      {/* Centered paper container with sharp borders */}
-      <main className="w-full max-w-[420px] bg-white border border-outline-variant/60 shadow-md p-8 md:p-12 text-left relative">
+      {/* Centered card container with sharp borders */}
+      <main className="w-full max-w-[420px] bg-surface border border-outline shadow-md p-8 md:p-12 text-left relative rounded-sm">
         
         {/* Brand logo heading */}
-        <header className="mb-8 pb-6 border-b border-outline-variant/20 text-center">
+        <header className="mb-8 pb-6 border-b border-outline/30 text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-2">
             <span className="material-symbols-outlined text-primary text-xl">menu_book</span>
-            <h1 className="font-display-lg text-lg tracking-widest uppercase font-bold text-on-surface">
+            <h1 className="font-sans text-lg tracking-widest uppercase font-bold text-on-surface">
               The Manuscript
             </h1>
           </Link>
-          <p className="font-body-md text-xs text-on-surface-variant italic mt-1">
+          <p className="font-sans text-[11px] text-on-surface-variant italic mt-1 leading-relaxed">
             Slow contemplation, literary design, distraction-free.
           </p>
         </header>
 
-        <div className="mb-6 text-center">
-          <h2 className="font-display-lg text-xl font-bold text-on-surface">Join the Manuscript</h2>
-        </div>
-
         {/* Validation Errors */}
         {validationError && (
-          <div className="mb-6 p-4 bg-error-container border border-error/20 text-on-error-container text-xs font-ui-label flex items-start gap-2">
+          <div className="mb-6 p-4 bg-error-container border border-error/20 text-on-error-container text-xs font-sans flex items-start gap-2">
             <span className="material-symbols-outlined text-error text-[18px]">error</span>
             <span>{validationError}</span>
           </div>
@@ -84,7 +80,7 @@ const Register = () => {
         <button
           onClick={handleGoogleLogin}
           type="button"
-          className="w-full flex items-center justify-center gap-3 py-3 border border-outline-variant/60 hover:bg-surface-container-low transition-colors duration-250 cursor-pointer mb-6 rounded-sm bg-white"
+          className="w-full flex items-center justify-center gap-3 py-3 border border-outline hover:bg-on-surface/5 transition-colors duration-250 cursor-pointer mb-6 rounded-md bg-white text-zinc-800 font-bold"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path
@@ -104,16 +100,16 @@ const Register = () => {
               fill="#EA4335"
             />
           </svg>
-          <span className="font-ui-label text-[10px] uppercase tracking-widest text-on-surface font-bold">
+          <span className="font-sans text-[10px] uppercase tracking-widest text-zinc-800 font-bold">
             Sign Up with Google
           </span>
         </button>
 
         <div className="relative flex items-center justify-center mb-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-outline-variant/30" />
+            <div className="w-full border-t border-outline/30" />
           </div>
-          <span className="relative px-3 bg-white text-[9px] font-ui-small text-on-surface-variant uppercase tracking-widest font-bold">
+          <span className="relative px-3 bg-surface text-[9px] font-sans text-on-surface-variant uppercase tracking-widest font-bold">
             Or
           </span>
         </div>
@@ -121,7 +117,7 @@ const Register = () => {
         {/* Register form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-ui-label text-[9px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold" htmlFor="name">
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold" htmlFor="name">
               Your Name
             </label>
             <input
@@ -129,14 +125,14 @@ const Register = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-background border border-outline-variant/60 focus:border-primary px-3 py-2 text-xs font-body-md outline-none rounded-sm transition-all"
+              className="w-full bg-white text-zinc-900 px-3 py-2 text-xs font-sans outline-none rounded-md transition-all border border-outline focus:border-primary placeholder:text-zinc-400"
               placeholder="Your Name"
               required
             />
           </div>
 
           <div>
-            <label className="block font-ui-label text-[9px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold" htmlFor="email">
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold" htmlFor="email">
               Email Address
             </label>
             <input
@@ -144,14 +140,14 @@ const Register = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-background border border-outline-variant/60 focus:border-primary px-3 py-2 text-xs font-body-md outline-none rounded-sm transition-all"
+              className="w-full bg-white text-zinc-900 px-3 py-2 text-xs font-sans outline-none rounded-md transition-all border border-outline focus:border-primary placeholder:text-zinc-400"
               placeholder="you@manuscript.com"
               required
             />
           </div>
 
           <div>
-            <label className="block font-ui-label text-[9px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold" htmlFor="password">
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold" htmlFor="password">
               Password
             </label>
             <input
@@ -159,7 +155,7 @@ const Register = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-background border border-outline-variant/60 focus:border-primary px-3 py-2 text-xs font-body-md outline-none rounded-sm transition-all"
+              className="w-full bg-white text-zinc-900 px-3 py-2 text-xs font-sans outline-none rounded-md transition-all border border-outline focus:border-primary placeholder:text-zinc-400"
               placeholder="••••••••"
               required
             />
@@ -167,7 +163,7 @@ const Register = () => {
 
           <button
             disabled={loading}
-            className="w-full bg-primary text-on-primary py-3 px-6 font-ui-label text-xs uppercase tracking-widest hover:bg-on-surface-variant transition-all duration-300 disabled:opacity-50 mt-2 cursor-pointer flex items-center justify-center gap-1.5"
+            className="w-full bg-primary text-on-primary py-3 px-6 font-sans text-xs uppercase tracking-widest hover:bg-secondary transition-all duration-300 disabled:opacity-50 mt-2 cursor-pointer flex items-center justify-center gap-1.5 font-bold rounded-sm"
             type="submit"
           >
             <span>{loading ? "Registering..." : "Create Account"}</span>
@@ -175,10 +171,10 @@ const Register = () => {
           </button>
         </form>
 
-        <p className="mt-8 text-center font-ui-small text-[10px] text-on-surface-variant uppercase tracking-wider">
+        <p className="mt-8 text-center font-sans text-[10px] text-on-surface-variant uppercase tracking-wider">
           Have an account?{" "}
           <Link
-            className="text-primary font-bold underline underline-offset-2 hover:text-secondary transition-all"
+            className="text-primary font-bold hover:text-secondary transition-all"
             to="/login"
           >
             Sign In instead

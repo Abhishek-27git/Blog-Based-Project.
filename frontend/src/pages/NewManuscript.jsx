@@ -141,10 +141,10 @@ const NewManuscript = () => {
     <div className="min-h-screen bg-background flex flex-col items-center pt-8 pb-32 px-margin-mobile md:px-0">
       
       {/* Action Header */}
-      <nav className="flex items-center justify-between max-w-reading-column-max w-full h-16 bg-background/80 backdrop-blur-sm sticky top-0 z-40 border-b border-outline-variant/30 mb-8">
+      <nav className="flex items-center justify-between max-w-reading-column-max w-full h-16 bg-background/80 backdrop-blur-sm sticky top-0 z-40 border-b border-outline/30 mb-8">
         <div className="flex items-center gap-4">
           <span className="material-symbols-outlined text-primary">draw</span>
-          <span className="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant">
+          <span className="font-sans text-xs uppercase tracking-widest text-on-surface-variant font-bold">
             {editId ? "Editing Manuscript" : "New Manuscript"}
           </span>
         </div>
@@ -152,14 +152,14 @@ const NewManuscript = () => {
           <button
             onClick={() => handleSave("draft")}
             disabled={loading}
-            className="font-ui-label text-ui-label text-on-surface-variant hover:text-secondary uppercase tracking-widest font-bold px-3 py-1.5 transition-colors disabled:opacity-50"
+            className="font-sans text-[10px] text-on-surface-variant hover:text-primary uppercase tracking-widest font-bold px-3 py-1.5 transition-colors disabled:opacity-50"
           >
             Save Draft
           </button>
           <button
             onClick={() => handleSave("published")}
             disabled={loading}
-            className="bg-primary text-on-primary px-6 py-2 border border-primary font-ui-label text-ui-label uppercase tracking-widest hover:bg-transparent hover:text-primary transition-all duration-300 disabled:opacity-50"
+            className="bg-primary text-on-primary px-6 py-2 border border-primary font-sans text-[10px] uppercase tracking-widest hover:bg-transparent hover:text-primary transition-all duration-300 disabled:opacity-50 font-bold rounded-sm"
           >
             Publish
           </button>
@@ -170,7 +170,7 @@ const NewManuscript = () => {
         
         {/* Error Alert */}
         {errorMsg && (
-          <div className="mb-6 p-4 bg-error-container text-on-error-container text-sm font-ui-label border border-error/20 flex items-start gap-2">
+          <div className="mb-6 p-4 bg-error-container text-on-error-container text-xs font-sans border border-error/20 flex items-start gap-2 rounded-sm">
             <span className="material-symbols-outlined text-error text-[18px]">
               error
             </span>
@@ -184,32 +184,32 @@ const NewManuscript = () => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="font-display-lg text-display-lg-mobile md:text-display-lg outline-none border-none bg-transparent placeholder:text-outline-variant w-full"
+            className="font-sans text-display-lg-mobile md:text-display-lg outline-none border-none bg-transparent placeholder:text-on-surface-variant/30 w-full text-on-surface font-black"
             placeholder="Title of your essay..."
             required
           />
           <div className="flex items-center gap-3 mt-4 text-on-surface-variant">
-            <span className="font-ui-small text-ui-small uppercase tracking-widest">
+            <span className="font-mono text-[9px] uppercase tracking-widest">
               By {localStorage.getItem("userName") || "You"}
             </span>
-            <span className="text-outline-variant">•</span>
-            <span className="font-ui-small text-ui-small uppercase tracking-widest">
+            <span className="text-outline">•</span>
+            <span className="font-mono text-[9px] uppercase tracking-widest text-primary">
               {wordCount} words
             </span>
           </div>
-          <hr className="mt-4 border-t border-outline-variant/30" />
+          <hr className="mt-4 border-t border-outline/30" />
         </header>
 
         {/* Metadata Controls */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-surface-container-low p-6 mb-8 border border-outline-variant">
+        <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-surface p-6 mb-8 border border-outline rounded-sm">
           <div>
-            <label className="block font-ui-label text-ui-label uppercase tracking-widest text-xs text-on-surface-variant mb-2">
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
               Category
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-background border border-outline-variant focus:border-secondary focus:ring-0 px-3 py-2 text-on-surface font-body-md outline-none"
+              className="w-full bg-white text-zinc-900 rounded-md px-3 py-2 text-xs font-sans outline-none transition-all border border-outline focus:border-primary"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -220,7 +220,7 @@ const NewManuscript = () => {
           </div>
 
           <div>
-            <label className="block font-ui-label text-ui-label uppercase tracking-widest text-xs text-on-surface-variant mb-2">
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
               Tags (Comma separated)
             </label>
             <input
@@ -228,12 +228,12 @@ const NewManuscript = () => {
               value={tags}
               onChange={(e) => setTags(e.target.value)}
               placeholder="e.g. mindfulness, art, history"
-              className="w-full bg-background border border-outline-variant focus:border-secondary focus:ring-0 px-3 py-2 text-on-surface font-body-md outline-none"
+              className="w-full bg-white text-zinc-900 rounded-md px-3 py-2 text-xs font-sans outline-none transition-all border border-outline focus:border-primary placeholder:text-zinc-400"
             />
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block font-ui-label text-ui-label uppercase tracking-widest text-xs text-on-surface-variant mb-2">
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
               Summary (Short teaser or excerpt)
             </label>
             <input
@@ -241,21 +241,21 @@ const NewManuscript = () => {
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="A brief editorial abstract explaining the focus of this piece..."
-              className="w-full bg-background border border-outline-variant focus:border-secondary focus:ring-0 px-3 py-2 text-on-surface font-body-md outline-none"
+              className="w-full bg-white text-zinc-900 rounded-md px-3 py-2 text-xs font-sans outline-none transition-all border border-outline focus:border-primary placeholder:text-zinc-400"
             />
           </div>
 
           <div className="sm:col-span-2 pb-2">
-            <label className="block font-ui-label text-ui-label uppercase tracking-widest text-xs text-on-surface-variant mb-2">
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
               Cover Artwork
             </label>
             <div className="flex flex-col sm:flex-row items-center gap-6">
               {imagePreview && (
-                <div className="w-32 h-20 overflow-hidden border border-outline-variant bg-background">
+                <div className="w-32 h-20 overflow-hidden border border-outline bg-background">
                   <img src={imagePreview} alt="Preview" className="w-full h-full object-cover grayscale" />
                 </div>
               )}
-              <label className="bg-background border border-outline-variant hover:border-primary text-on-surface px-4 py-2 font-ui-label text-xs uppercase tracking-widest cursor-pointer">
+              <label className="bg-surface border border-outline hover:border-primary text-on-surface px-4 py-2 font-sans text-xs uppercase tracking-widest cursor-pointer font-bold rounded-sm">
                 Choose Artwork
                 <input
                   type="file"
@@ -270,20 +270,20 @@ const NewManuscript = () => {
 
         {/* Content Editor */}
         <section className="writing-canvas">
-          <label className="block font-ui-label text-ui-label uppercase tracking-widest text-xs text-on-surface-variant mb-2">
+          <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">
             Content Body (Supports plain text or HTML syntax)
           </label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="The first sentence is the hardest..."
-            className="w-full min-h-[500px] bg-background border border-outline-variant focus:border-secondary focus:ring-0 p-6 text-on-surface font-body-lg text-lg leading-relaxed outline-none resize-y"
+            className="w-full min-h-[500px] bg-background border border-outline focus:border-primary p-6 text-on-surface-variant font-sans text-base leading-relaxed outline-none resize-y rounded-sm"
             required
           />
         </section>
 
         {/* Break ornament */}
-        <div className="flex justify-center items-center py-12 text-secondary opacity-40">
+        <div className="flex justify-center items-center py-12 text-primary opacity-40">
           <span className="material-symbols-outlined">flare</span>
         </div>
 

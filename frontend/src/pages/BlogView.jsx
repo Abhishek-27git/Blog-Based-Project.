@@ -143,6 +143,19 @@ const BlogView = () => {
     }
   };
 
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress((window.scrollY / totalScroll) * 100);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   if (loading) {
     return <BlogDetailSkeleton />;
   }
@@ -153,11 +166,11 @@ const BlogView = () => {
         <span className="material-symbols-outlined text-5xl text-on-surface-variant mb-4">
           search_off
         </span>
-        <h2 className="font-display-lg text-headline-md">Essay Not Found</h2>
-        <p className="font-body-md text-on-surface-variant mt-2">
+        <h2 className="font-sans text-headline-md font-bold text-on-surface">Essay Not Found</h2>
+        <p className="font-sans text-on-surface-variant mt-2 text-sm">
           The requested manuscript could not be found.
         </p>
-        <Link to="/" className="text-secondary font-bold hover:underline mt-4">
+        <Link to="/" className="text-primary font-bold hover:underline mt-4 text-xs tracking-wider uppercase">
           Return to Reading List
         </Link>
       </div>
@@ -170,7 +183,7 @@ const BlogView = () => {
     const isAdmin = user && user.role === "admin";
 
     return (
-      <div className="border-l border-outline-variant/40 pl-4 py-1 my-3 text-left">
+      <div className="border-l border-outline pl-4 py-1 my-3 text-left">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
             {comment.author?.avatar ? (
@@ -185,10 +198,10 @@ const BlogView = () => {
               </span>
             )}
             <div>
-              <p className="font-ui-label text-[10px] font-bold text-primary">
+              <p className="font-sans text-[10px] font-bold text-on-surface">
                 {comment.isDeleted ? "Anonymous" : comment.author?.name || "Anonymous"}
               </p>
-              <p className="font-ui-small text-[9px] text-on-surface-variant">
+              <p className="font-mono text-[8px] text-on-surface-variant uppercase tracking-wider">
                 {new Date(comment.createdAt).toLocaleDateString()}
               </p>
             </div>
@@ -197,14 +210,14 @@ const BlogView = () => {
           {!comment.isDeleted && (isOwner || isAdmin) && (
             <button
               onClick={() => handleDeleteComment(comment._id)}
-              className="text-error font-ui-small text-[9px] hover:underline cursor-pointer"
+              className="text-error font-mono text-[9px] hover:underline cursor-pointer uppercase tracking-wider"
             >
               Delete
             </button>
           )}
         </div>
 
-        <div className="my-2 font-body-md text-xs text-on-surface leading-relaxed">
+        <div className="my-2 font-sans text-xs text-on-surface-variant leading-relaxed">
           {comment.isDeleted ? (
             <span className="italic text-on-surface-variant/75">
               [ This comment has been deleted by its author ]
@@ -218,7 +231,7 @@ const BlogView = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setReplyingTo(replyingTo === comment._id ? null : comment._id)}
-              className="font-ui-small text-[9px] text-secondary hover:text-primary hover:underline uppercase tracking-wider cursor-pointer"
+              className="font-mono text-[9px] text-primary hover:underline uppercase tracking-wider cursor-pointer font-bold"
             >
               {replyingTo === comment._id ? "Cancel" : "Reply"}
             </button>
@@ -229,18 +242,18 @@ const BlogView = () => {
         {replyingTo === comment._id && (
           <form
             onSubmit={(e) => handleCommentSubmit(e, comment._id)}
-            className="mt-3 flex flex-col items-end border border-outline-variant/60 bg-background p-3 rounded"
+            className="mt-3 flex flex-col items-end border border-outline bg-surface-container p-3 rounded-sm"
           >
             <textarea
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              className="w-full bg-transparent border-none focus:ring-0 text-xs font-body-md resize-none h-16 outline-none"
+              className="w-full bg-transparent border-none focus:ring-0 text-xs font-sans text-on-surface resize-none h-16 outline-none placeholder:text-on-surface-variant/50"
               placeholder="Write your response..."
               required
             />
             <button
               type="submit"
-              className="bg-primary text-on-primary px-3 py-1 font-ui-label text-[9px] uppercase tracking-wider mt-2 hover:bg-on-surface-variant transition-colors"
+              className="bg-primary text-on-primary px-3 py-1 font-sans text-[9px] uppercase tracking-wider mt-2 hover:bg-secondary transition-colors font-bold"
             >
               Post Reply
             </button>
@@ -261,19 +274,21 @@ const BlogView = () => {
 
   return (
     <main className="max-w-reading-column-max mx-auto px-6 md:px-0 pt-16 pb-40">
+      {/* Scroll indicator reading bar */}
+      <div className="reading-bar" style={{ width: `${scrollProgress}%` }} />
       
-      {/* Paper Container matching Reference Image 3 layout */}
-      <article className="bg-white border border-outline-variant/60 shadow-md p-8 md:p-16 text-left relative">
+      {/* Paper Container matching Obsidian aesthetic */}
+      <article className="bg-surface border border-outline shadow-md p-8 md:p-16 text-left relative rounded-sm">
         
         {/* Essay Header */}
-        <header className="mb-10 text-left border-b border-outline-variant/20 pb-8">
-          <div className="flex items-center gap-2 mb-4 font-ui-small text-[10px] uppercase tracking-widest text-secondary font-bold">
+        <header className="mb-10 text-left border-b border-outline/30 pb-8">
+          <div className="flex items-center gap-2 mb-4 font-mono text-[9px] uppercase tracking-widest text-primary font-bold">
             <span>{blog.category}</span>
             <span>•</span>
             <span>{blog.readTime || 5} Min Read</span>
           </div>
 
-          <h2 className="font-display-lg text-3xl md:text-4xl font-bold mb-6 leading-tight text-on-surface">
+          <h2 className="font-sans text-3xl md:text-4xl font-bold mb-6 leading-tight text-on-surface">
             {blog.title}
           </h2>
 
@@ -282,7 +297,7 @@ const BlogView = () => {
               <img
                 src={blog.author.avatar}
                 alt={blog.author?.name}
-                className="w-10 h-10 rounded-full grayscale border border-outline-variant object-cover"
+                className="w-10 h-10 rounded-full grayscale border border-outline object-cover"
               />
             ) : (
               <span className="material-symbols-outlined text-[40px] text-on-surface-variant">
@@ -290,10 +305,10 @@ const BlogView = () => {
               </span>
             )}
             <div>
-              <p className="font-ui-label text-xs font-bold text-primary">
+              <p className="font-sans text-xs font-bold text-on-surface">
                 {blog.author?.name || "Anonymous"}
               </p>
-              <p className="font-ui-small text-[10px] text-on-surface-variant">
+              <p className="font-mono text-[9px] uppercase tracking-wider text-on-surface-variant">
                 {new Date(blog.createdAt).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -306,7 +321,7 @@ const BlogView = () => {
 
         {/* Cover Image */}
         {blog.coverImage && (
-          <div className="w-full h-80 overflow-hidden border border-outline-variant/40 mb-10 bg-surface-container">
+          <div className="w-full h-80 overflow-hidden border border-outline mb-10 bg-surface-container relative">
             <img
               src={blog.coverImage}
               alt={blog.title}
@@ -317,18 +332,18 @@ const BlogView = () => {
 
         {/* Main Content Body */}
         <div
-          className="essay-content font-body-lg text-base md:text-lg text-on-surface space-y-6 leading-relaxed drop-cap select-text"
+          className="essay-content font-sans text-base md:text-lg text-on-surface-variant space-y-6 leading-relaxed drop-cap select-text"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
 
         {/* Author details card at bottom of article */}
-        <footer className="mt-16 pt-8 border-t border-outline-variant/20">
-          <div className="flex flex-col sm:flex-row items-center gap-6 bg-surface-container-low/50 p-6 border border-outline-variant/40">
+        <footer className="mt-16 pt-8 border-t border-outline/30">
+          <div className="flex flex-col sm:flex-row items-center gap-6 bg-surface-container-low p-6 border border-outline rounded-sm">
             {blog.author?.avatar ? (
               <img
                 src={blog.author.avatar}
                 alt={blog.author.name}
-                className="w-16 h-16 grayscale border border-primary object-cover rounded"
+                className="w-16 h-16 grayscale border border-primary object-cover rounded-sm"
               />
             ) : (
               <span className="material-symbols-outlined text-[64px] text-on-surface-variant">
@@ -336,8 +351,8 @@ const BlogView = () => {
               </span>
             )}
             <div className="text-center sm:text-left flex-1">
-              <h4 className="font-headline-sm text-sm font-bold mb-1">About the Writer</h4>
-              <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">
+              <h4 className="font-sans text-sm font-bold mb-1 text-on-surface">About the Writer</h4>
+              <p className="font-sans text-xs text-on-surface-variant leading-relaxed">
                 {blog.author?.bio || `${blog.author?.name || "Anonymous"} is a contributing writer to The Manuscript platform.`}
               </p>
             </div>
@@ -346,36 +361,36 @@ const BlogView = () => {
       </article>
 
       {/* Threaded Comments Section */}
-      <section className="mt-12 bg-white border border-outline-variant/60 shadow-sm p-6 md:p-12 text-left">
-        <h3 className="font-headline-sm text-lg font-bold text-primary mb-6 border-b border-outline-variant/20 pb-3">
+      <section className="mt-12 bg-surface border border-outline shadow-sm p-6 md:p-12 text-left rounded-sm">
+        <h3 className="font-sans text-lg font-bold text-on-surface mb-6 border-b border-outline/30 pb-3">
           Responses ({comments.length})
         </h3>
 
         {/* New Response Form */}
         {user ? (
-          <form onSubmit={(e) => handleCommentSubmit(e)} className="mb-8 border border-outline-variant/60 bg-surface-container-low p-4 flex flex-col items-end">
+          <form onSubmit={(e) => handleCommentSubmit(e)} className="mb-8 border border-outline bg-surface-container-low p-4 flex flex-col items-end rounded-sm">
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              className="w-full bg-transparent border-none focus:ring-0 text-sm font-body-md resize-none h-20 outline-none"
+              className="w-full bg-transparent border-none focus:ring-0 text-sm font-sans text-on-surface resize-none h-20 outline-none placeholder:text-on-surface-variant/50"
               placeholder="What are your thoughts on this essay?"
               required
             />
             <button
               type="submit"
-              className="bg-primary text-on-primary px-4 py-1.5 font-ui-label text-[10px] uppercase tracking-widest hover:bg-on-surface-variant transition-colors"
+              className="bg-primary text-on-primary px-4 py-1.5 font-sans text-[10px] uppercase tracking-widest hover:bg-secondary transition-colors font-bold"
             >
               Publish Response
             </button>
           </form>
         ) : (
-          <div className="mb-8 p-6 bg-surface-container border border-outline-variant/60 text-center">
-            <p className="font-body-md text-sm text-on-surface-variant mb-4">
+          <div className="mb-8 p-6 bg-surface-container-low border border-outline text-center rounded-sm">
+            <p className="font-sans text-sm text-on-surface-variant mb-4">
               You must be logged in to participate in the conversation.
             </p>
             <Link
               to="/login"
-              className="inline-block bg-primary text-on-primary px-6 py-2 font-ui-label text-xs uppercase tracking-widest"
+              className="inline-block bg-primary text-on-primary hover:bg-secondary transition-colors px-6 py-2 font-sans text-xs uppercase tracking-widest font-bold"
             >
               Sign In to Reply
             </Link>
@@ -385,7 +400,7 @@ const BlogView = () => {
         {/* Comments Tree */}
         <div className="space-y-4">
           {comments.length === 0 ? (
-            <p className="font-body-md text-sm italic text-on-surface-variant text-center py-6">
+            <p className="font-sans text-sm italic text-on-surface-variant text-center py-6">
               No responses yet. Be the first to share your thoughts.
             </p>
           ) : (
@@ -397,7 +412,7 @@ const BlogView = () => {
       </section>
 
       {/* Floating Action Pill Toolbar at bottom center */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/90 backdrop-blur-md px-6 py-2.5 rounded-full border border-outline-variant/60 shadow-lg flex items-center gap-6">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-surface/85 backdrop-blur-md px-6 py-2.5 rounded-full border border-outline shadow-lg flex items-center gap-6">
         
         {/* Like Button */}
         <button
@@ -412,12 +427,12 @@ const BlogView = () => {
           >
             favorite
           </span>
-          <span className="font-ui-small text-[10px] text-on-surface-variant group-hover:text-primary font-bold">
+          <span className="font-mono text-[9px] text-on-surface-variant group-hover:text-primary font-bold">
             {likesCount}
           </span>
         </button>
 
-        <span className="h-4 w-px bg-outline-variant/60" />
+        <span className="h-4 w-px bg-outline" />
 
         {/* Bookmark Button */}
         <button
@@ -426,18 +441,18 @@ const BlogView = () => {
         >
           <span
             className={`material-symbols-outlined text-[20px] transition-colors ${
-              isBookmarked ? "text-secondary" : "text-on-surface-variant group-hover:text-primary"
+              isBookmarked ? "text-primary" : "text-on-surface-variant group-hover:text-primary"
             }`}
             style={{ fontVariationSettings: isBookmarked ? "'FILL' 1" : "'FILL' 0" }}
           >
             bookmark
           </span>
-          <span className="font-ui-small text-[10px] text-on-surface-variant group-hover:text-primary font-bold">
+          <span className="font-mono text-[9px] text-on-surface-variant group-hover:text-primary font-bold">
             {isBookmarked ? "Saved" : "Save"}
           </span>
         </button>
 
-        <span className="h-4 w-px bg-outline-variant/60" />
+        <span className="h-4 w-px bg-outline" />
 
         {/* Comments shortcut */}
         <button
@@ -447,7 +462,7 @@ const BlogView = () => {
           <span className="material-symbols-outlined text-[20px] text-on-surface-variant group-hover:text-primary">
             add_comment
           </span>
-          <span className="font-ui-small text-[10px] text-on-surface-variant group-hover:text-primary font-bold">
+          <span className="font-mono text-[9px] text-on-surface-variant group-hover:text-primary font-bold">
             Respond
           </span>
         </button>
