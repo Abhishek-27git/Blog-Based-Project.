@@ -63,115 +63,11 @@ const Home = () => {
     fetchBlogs();
   };
 
-  // Pick the most viewed blog from the current set as the featured spotlight
-  const featuredBlog = blogs.length > 0 
-    ? blogs.reduce((prev, current) => ((prev.views || 0) > (current.views || 0) ? prev : current))
-    : null;
-
-  const gridBlogs = featuredBlog 
-    ? blogs.filter((b) => b._id !== featuredBlog._id)
-    : blogs;
-
   return (
     <main className="max-w-7xl mx-auto px-6 md:px-12 pt-12 pb-32">
-      {/* Premium Editorial Header */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 pb-12 border-b border-outline/30 items-stretch">
-        {/* Left Column: Manifesto */}
-        <header className="lg:col-span-5 flex flex-col justify-center text-left pr-0 lg:pr-6">
-          <span className="font-mono text-[10px] text-primary uppercase tracking-widest block mb-3 font-bold">
-            Platform Manifesto
-          </span>
-          <h2 className="font-sans text-display-lg-mobile md:text-4xl lg:text-5xl font-black mb-4 leading-tight text-on-surface">
-            The Architecture of Silence
-          </h2>
-          <p className="font-sans text-xs md:text-sm text-on-surface-variant leading-relaxed max-w-lg mb-6">
-            A distraction-free sanctuary for slow contemplation, literary design, and academic essays. In an age of relentless digital assault, we provide margins for ideas to breathe.
-          </p>
-          <div className="flex items-center gap-2 text-primary">
-            <span className="font-mono text-[9px] uppercase tracking-widest font-bold">Est. 2026</span>
-            <span className="text-outline/40">•</span>
-            <span className="font-mono text-[9px] uppercase tracking-widest font-bold text-on-surface-variant">The Colophon</span>
-          </div>
-        </header>
-
-        {/* Right Column: Featured Blog Spotlight */}
-        <div className="lg:col-span-7 flex">
-          {featuredBlog ? (
-            <article className="w-full border border-outline bg-surface/25 hover:bg-surface hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 flex flex-col md:flex-row group rounded-sm overflow-hidden">
-              {/* Cover Artwork */}
-              {featuredBlog.coverImage ? (
-                <div className="w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:h-full overflow-hidden bg-surface-container relative border-b md:border-b-0 md:border-r border-outline/40">
-                  <img
-                    src={featuredBlog.coverImage}
-                    alt={featuredBlog.title}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-102 transition-all duration-500"
-                  />
-                </div>
-              ) : (
-                <div className="w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:h-full bg-gradient-to-br from-surface-container-low to-surface-container-high border-b md:border-b-0 md:border-r border-outline/40 flex flex-col items-center justify-center p-6 text-center">
-                  <span className="font-sans text-6xl text-primary/10 select-none font-black mb-2">✻</span>
-                  <span className="font-mono text-[9px] text-primary uppercase tracking-wider font-bold">Featured Essay</span>
-                </div>
-              )}
-
-              {/* Spotlight Content */}
-              <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between text-left">
-                <div>
-                  <div className="flex items-center gap-2 mb-3 font-mono text-[9px] uppercase tracking-widest text-primary font-bold">
-                    <span>Spotlight</span>
-                    <span>•</span>
-                    <span>{featuredBlog.category}</span>
-                  </div>
-                  <Link to={`/post/${featuredBlog.slug}`}>
-                    <h3 className="font-sans text-xl font-bold mb-3 text-on-surface group-hover:text-primary transition-colors leading-snug">
-                      {featuredBlog.title}
-                    </h3>
-                  </Link>
-                  <p className="font-sans text-xs text-on-surface-variant line-clamp-4 leading-relaxed mb-6">
-                    {featuredBlog.summary || (featuredBlog.content && featuredBlog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-outline/20 mt-auto">
-                  <div className="flex items-center gap-2">
-                    {featuredBlog.author?.avatar ? (
-                      <img
-                        src={featuredBlog.author.avatar}
-                        alt={featuredBlog.author.name}
-                        className="w-6 h-6 rounded-full border border-outline object-cover grayscale"
-                      />
-                    ) : (
-                      <span className="material-symbols-outlined text-on-surface-variant text-lg">
-                        account_circle
-                      </span>
-                    )}
-                    <span className="font-sans text-[10px] uppercase tracking-wider text-on-surface font-semibold">
-                      {featuredBlog.author?.name || "Anonymous"}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-on-surface-variant font-mono text-[9px]">
-                    <span className="flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs">visibility</span>
-                      {featuredBlog.views || 0}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ) : (
-            <div className="w-full border border-outline border-dashed bg-surface/10 flex flex-col justify-center items-center p-8 rounded-sm text-center">
-              <span className="material-symbols-outlined text-3xl text-on-surface-variant/40 mb-2">
-                auto_stories
-              </span>
-              <p className="font-sans text-xs text-on-surface-variant/60 italic">No manuscripts highlighted yet.</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Modern Filter and Search Row */}
+      
+      {/* Modern Filter and Search Row - Placed at the very top */}
       <section className="mb-12 flex flex-col lg:flex-row gap-6 items-center justify-between pb-6 border-b border-outline/20">
-        
         {/* Category Pills Navigation Row */}
         <div className="flex gap-2 w-full lg:w-auto overflow-x-auto no-scrollbar py-2">
           <button
@@ -236,27 +132,44 @@ const Home = () => {
           <p className="font-sans text-xs text-on-surface-variant italic">No manuscripts match your query.</p>
         </div>
       ) : (
-        /* Grid of other blogs */
-        <div>
-          {gridBlogs.length > 0 && (
-            <div className="flex items-center space-x-3 mb-8">
-              <span className="font-mono text-[10px] text-primary uppercase tracking-widest font-bold">
-                More Manuscripts
-              </span>
-              <div className="flex-grow h-px bg-outline/30"></div>
-            </div>
-          )}
+        /* Unified Stacked List of all blogs - one below the other */
+        <div className="space-y-12">
+          {blogs.map((blog) => (
+            <div key={blog._id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 py-12 border-b border-outline/30 items-stretch last:border-b-0">
+              {/* Left Column: Dynamic Blog Details */}
+              <header className="lg:col-span-5 flex flex-col justify-center text-left pr-0 lg:pr-6">
+                <span className="font-mono text-[10px] text-primary uppercase tracking-widest block mb-3 font-bold">
+                  {blog.category}
+                </span>
+                <Link to={`/post/${blog.slug}`}>
+                  <h2 className="font-sans text-display-lg-mobile md:text-4xl lg:text-5xl font-black mb-4 leading-tight text-on-surface hover:text-primary transition-colors">
+                    {blog.title}
+                  </h2>
+                </Link>
+                <p className="font-sans text-xs md:text-sm text-on-surface-variant leading-relaxed max-w-lg mb-6 line-clamp-3">
+                  {blog.summary || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
+                </p>
+                <div className="flex items-center gap-2 text-primary">
+                  <span className="font-mono text-[9px] uppercase tracking-widest font-bold">
+                    {new Date(blog.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric"
+                    })}
+                  </span>
+                  <span className="text-outline/40">•</span>
+                  <span className="font-mono text-[9px] uppercase tracking-widest font-bold text-on-surface-variant">
+                    By {blog.author?.name || "Anonymous"}
+                  </span>
+                </div>
+              </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-outline/50">
-            {gridBlogs.map((blog) => (
-              <article
-                key={blog._id}
-                className="border-r border-b border-outline/50 bg-surface/15 hover:bg-surface p-8 flex flex-col justify-between hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 group relative"
-              >
-                <div>
-                  {/* Cover Image with grayscale-to-color transition */}
+              {/* Right Column: Blog details card */}
+              <div className="lg:col-span-7 flex">
+                <article className="w-full border border-outline bg-surface/25 hover:bg-surface hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 flex flex-col md:flex-row group rounded-sm overflow-hidden">
+                  {/* Cover Artwork */}
                   {blog.coverImage ? (
-                    <div className="w-full aspect-[16/10] overflow-hidden border border-outline/60 mb-6 bg-surface-container relative">
+                    <div className="w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:h-full overflow-hidden bg-surface-container relative border-b md:border-b-0 md:border-r border-outline/40">
                       <img
                         src={blog.coverImage}
                         alt={blog.title}
@@ -264,79 +177,62 @@ const Home = () => {
                       />
                     </div>
                   ) : (
-                    <div className="w-full aspect-[16/10] bg-gradient-to-br from-surface-container-low to-surface-container-high border border-outline/40 mb-6 flex flex-col items-center justify-center relative p-6 rounded-sm">
-                      {/* Artistic visual placeholder background ornament */}
+                    <div className="w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:h-full bg-gradient-to-br from-surface-container-low to-surface-container-high border-b md:border-b-0 md:border-r border-outline/40 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
                       <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] bg-[radial-gradient(#c5a85c_1px,transparent_1px)] [background-size:16px_16px]"></div>
                       <span className="font-sans text-5xl font-extrabold text-primary/10 select-none mb-1">
                         {blog.category ? blog.category.charAt(0) : "M"}
                       </span>
-                      <span className="font-mono text-[8px] uppercase tracking-widest text-primary/50 font-bold">
+                      <span className="font-mono text-[9px] uppercase tracking-widest text-primary/50 font-bold">
                         Manuscript Abstract
                       </span>
                     </div>
                   )}
 
-                  {/* Date & Category tag */}
-                  <div className="flex items-center gap-2 mb-3 font-mono text-[9px] uppercase tracking-widest text-primary font-bold">
-                    <span>
-                      {new Date(blog.createdAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                    <span>•</span>
-                    <span>{blog.category}</span>
-                  </div>
+                  {/* Spotlight Content */}
+                  <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between text-left">
+                    <div>
+                      <div className="flex items-center gap-2 mb-3 font-mono text-[9px] uppercase tracking-widest text-primary font-bold">
+                        <span>{blog.category}</span>
+                      </div>
+                      <Link to={`/post/${blog.slug}`}>
+                        <h3 className="font-sans text-base font-bold mb-3 text-on-surface group-hover:text-primary transition-colors leading-snug">
+                          {blog.title}
+                        </h3>
+                      </Link>
+                      <p className="font-sans text-xs text-on-surface-variant line-clamp-4 leading-relaxed mb-6">
+                        {blog.summary || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
+                      </p>
+                    </div>
 
-                  {/* Blog Title */}
-                  <Link to={`/post/${blog.slug}`}>
-                    <h3 className="font-sans text-lg font-bold mb-3 text-on-surface group-hover:text-primary transition-colors leading-snug">
-                      {blog.title}
-                    </h3>
-                  </Link>
-
-                  {/* Excerpt */}
-                  <p className="font-sans text-xs text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-                    {blog.summary ||
-                      (blog.content &&
-                        blog.content.replace(/<[^>]*>/g, "").substring(0, 120) + "...")}
-                  </p>
-                </div>
-
-                {/* Author & Stats footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-outline/30 mt-auto">
-                  <div className="flex items-center gap-2">
-                    {blog.author?.avatar ? (
-                      <img
-                        src={blog.author.avatar}
-                        alt={blog.author.name}
-                        className="w-6 h-6 rounded-full border border-outline object-cover grayscale"
-                      />
-                    ) : (
-                      <span className="material-symbols-outlined text-on-surface-variant text-lg">
-                        account_circle
-                      </span>
-                    )}
-                    <span className="font-sans text-[10px] uppercase tracking-wider text-on-surface font-semibold">
-                      {blog.author?.name || "Anonymous"}
-                    </span>
+                    <div className="flex items-center justify-between pt-4 border-t border-outline/20 mt-auto">
+                      <div className="flex items-center gap-2">
+                        {blog.author?.avatar ? (
+                          <img
+                            src={blog.author.avatar}
+                            alt={blog.author.name}
+                            className="w-6 h-6 rounded-full border border-outline object-cover grayscale"
+                          />
+                        ) : (
+                          <span className="material-symbols-outlined text-on-surface-variant text-lg">
+                            account_circle
+                          </span>
+                        )}
+                        <span className="font-sans text-[10px] uppercase tracking-wider text-on-surface font-semibold">
+                          {blog.author?.name || "Anonymous"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-on-surface-variant font-mono text-[9px]">
+                        <span className="flex items-center gap-0.5">
+                          <span className="material-symbols-outlined text-xs">visibility</span>
+                          {blog.views || 0}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3 text-on-surface-variant font-mono text-[9px]">
-                    <span className="flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs">visibility</span>
-                      {blog.views || 0}
-                    </span>
-                    <span className="flex items-center gap-0.5 text-error">
-                      <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>
-                        favorite
-                      </span>
-                      {blog.likes?.length || 0}
-                    </span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
