@@ -273,7 +273,7 @@ const BlogView = () => {
   };
 
   return (
-    <main className="max-w-reading-column-max mx-auto px-6 md:px-0 pt-16 pb-40">
+    <main className="max-w-reading-column-max mx-auto px-6 md:px-0 pt-16 pb-40 animate-fade-in">
       {/* Scroll indicator reading bar */}
       <div className="reading-bar" style={{ width: `${scrollProgress}%` }} />
       
@@ -291,6 +291,12 @@ const BlogView = () => {
           <h2 className="font-sans text-3xl md:text-4xl font-bold mb-6 leading-tight text-on-surface">
             {blog.title}
           </h2>
+
+          {blog.excerpt && (
+            <p className="font-sans text-sm md:text-base text-on-surface-variant/80 italic mb-6 leading-relaxed max-w-2xl border-l-2 border-primary/30 pl-4">
+              {blog.excerpt}
+            </p>
+          )}
 
           <div className="flex items-center gap-4 pt-4">
             {blog.author?.avatar ? (
@@ -353,7 +359,7 @@ const BlogView = () => {
             <div className="text-center sm:text-left flex-1">
               <h4 className="font-sans text-sm font-bold mb-1 text-on-surface">About the Writer</h4>
               <p className="font-sans text-xs text-on-surface-variant leading-relaxed">
-                {blog.author?.bio || `${blog.author?.name || "Anonymous"} is a contributing writer to The Manuscript platform.`}
+                {blog.author?.bio || `${blog.author?.name || "Anonymous"} is a contributing writer to YourSpace.`}
               </p>
             </div>
           </div>

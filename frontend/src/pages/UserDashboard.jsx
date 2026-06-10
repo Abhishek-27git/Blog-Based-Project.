@@ -108,7 +108,7 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-background">
+    <div className="min-h-screen flex flex-col md:flex-row bg-background animate-fade-in">
       
       {/* Sidebar navigation */}
       <aside className="w-full md:w-64 border-r border-outline bg-surface flex flex-col py-10 px-6">
@@ -171,7 +171,7 @@ const UserDashboard = () => {
       <main className="flex-1 py-12 px-6 md:px-12">
         
         {activeTab === "workspace" && (
-          <div>
+          <div className="animate-fade-in-up">
             
             {/* Big Metrics Counters Grid matching Image 5 */}
             <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
@@ -255,7 +255,7 @@ const UserDashboard = () => {
                           {blog.title || "[ Untitled Draft ]"}
                         </h4>
                         <p className="font-sans text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
-                          {blog.summary || "No summary abstract provided."}
+                          {blog.excerpt || "No summary abstract provided."}
                         </p>
                       </div>
                       <div className="flex justify-between items-center pt-4 border-t border-outline/20 mt-4">
@@ -309,7 +309,7 @@ const UserDashboard = () => {
                           </h4>
                         </Link>
                         <p className="font-sans text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
-                          {blog.summary}
+                          {blog.excerpt}
                         </p>
                       </div>
                       <div className="flex justify-between items-center pt-4 border-t border-outline/20 mt-4">
@@ -338,7 +338,7 @@ const UserDashboard = () => {
         )}
 
         {activeTab === "bookmarks" && (
-          <div>
+          <div className="animate-fade-in-up">
             <h3 className="font-sans text-xl md:text-2xl font-bold text-on-surface mb-8 pb-3 border-b border-outline/20 text-left">
               Saved Manuscripts
             </h3>
@@ -365,7 +365,7 @@ const UserDashboard = () => {
                         </h4>
                       </Link>
                       <p className="font-sans text-xs text-on-surface-variant line-clamp-2 italic mb-4 text-left leading-relaxed">
-                        {blog.summary}
+                        {blog.excerpt}
                       </p>
                     </div>
                     <div className="flex justify-between items-center pt-4 border-t border-outline/20 mt-4">
@@ -387,20 +387,22 @@ const UserDashboard = () => {
         )}
 
         {activeTab === "settings" && (
-          <div className="max-w-xl text-left bg-surface border border-outline p-8 shadow-sm rounded-sm">
+          <div className="max-w-xl text-left bg-surface border border-outline p-8 shadow-sm rounded-sm animate-fade-in-up">
             <h3 className="font-sans text-lg font-bold text-on-surface mb-8 pb-3 border-b border-outline/20">
               Profile Configuration
             </h3>
             
             {profileSuccessMsg && (
-              <div className="mb-6 p-4 bg-green-950/30 text-green-400 text-xs font-sans border border-green-800 rounded-sm">
-                {profileSuccessMsg}
+              <div className="mb-6 p-4 bg-green-100 dark:bg-green-950/30 text-green-800 dark:text-green-400 text-xs font-sans border border-green-200 dark:border-green-800 rounded-sm flex items-center gap-2 animate-fade-in">
+                <span className="material-symbols-outlined text-[16px] text-green-700 dark:text-green-400">check_circle</span>
+                <span>{profileSuccessMsg}</span>
               </div>
             )}
 
             {profileErrorMsg && (
-              <div className="mb-6 p-4 bg-error-container text-on-error-container text-xs font-sans border border-error/20 rounded-sm">
-                {profileErrorMsg}
+              <div className="mb-6 p-4 bg-error-container text-on-error-container text-xs font-sans border border-error/20 rounded-sm flex items-start gap-2 animate-fade-in">
+                <span className="material-symbols-outlined text-[16px] text-error">error</span>
+                <span>{profileErrorMsg}</span>
               </div>
             )}
 

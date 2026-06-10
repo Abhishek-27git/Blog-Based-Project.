@@ -158,9 +158,47 @@
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #161718 25%, #1e1f20 50%, #161718 75%);
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-container) 25%,
+    var(--color-surface-container-high) 50%,
+    var(--color-surface-container) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
+}
+
+/* Page and Content Transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-fast {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom Scrollbar matching Obsidian feel */
@@ -177,4 +215,23 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #c5a85c;
+}
+
+/* Focus Mode Global Layout Overrides */
+.focus-mode-active header {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-100%);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.focus-mode-active footer {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(100%);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.focus-transition {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }

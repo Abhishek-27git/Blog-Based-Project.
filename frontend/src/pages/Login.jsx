@@ -55,7 +55,7 @@ const Login = () => {
           <Link to="/" className="inline-flex items-center gap-2 mb-2">
             <span className="material-symbols-outlined text-primary text-xl">menu_book</span>
             <h1 className="font-sans text-lg tracking-widest uppercase font-bold text-on-surface">
-              The Manuscript
+              YourSpace
             </h1>
           </Link>
           <p className="font-sans text-[11px] text-on-surface-variant italic mt-1 leading-relaxed">

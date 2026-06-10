@@ -4,7 +4,6 @@ import { AuthProvider } from "./context/AuthContext";
 
 // Components
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
@@ -69,15 +68,13 @@ function App() {
                     </span>
                     <h2 className="font-display-lg text-headline-md">Page Not Found</h2>
                     <p className="font-body-md text-on-surface-variant mt-2">
-                      The manuscript page you are trying to read does not exist.
+                      The page you are trying to read does not exist.
                     </p>
                   </div>
                 }
               />
             </Routes>
           </div>
-
-          <Footer />
         </div>
       </Router>
     </AuthProvider>

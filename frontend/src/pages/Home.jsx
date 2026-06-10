@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../utils/api";
-import { BlogCardSkeleton } from "../components/Skeleton";
+import { BlogStackedListSkeleton } from "../components/Skeleton";
 
 const Home = () => {
   if (new URLSearchParams(window.location.search).get("trigger_error") === "true") {
@@ -64,7 +64,7 @@ const Home = () => {
   };
 
   return (
-    <main className="max-w-7xl mx-auto px-6 md:px-12 pt-12 pb-32">
+    <main className="max-w-7xl mx-auto px-6 md:px-12 pt-12 pb-32 animate-fade-in">
       
       {/* Modern Filter and Search Row - Placed at the very top */}
       <section className="mb-12 flex flex-col lg:flex-row gap-6 items-center justify-between pb-6 border-b border-outline/20">
@@ -119,11 +119,7 @@ const Home = () => {
 
       {/* Loading States */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-l border-outline/50">
-          <div className="border-r border-b border-outline/50 p-8"><BlogCardSkeleton /></div>
-          <div className="border-r border-b border-outline/50 p-8"><BlogCardSkeleton /></div>
-          <div className="border-r border-b border-outline/50 p-8"><BlogCardSkeleton /></div>
-        </div>
+        <BlogStackedListSkeleton />
       ) : blogs.length === 0 ? (
         <div className="text-center py-24 border border-dashed border-outline bg-surface-container-low flex flex-col justify-center items-center rounded-sm">
           <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-3">
@@ -133,7 +129,7 @@ const Home = () => {
         </div>
       ) : (
         /* Unified Stacked List of all blogs - one below the other */
-        <div className="space-y-12">
+        <div className="space-y-12 animate-fade-in-up">
           {blogs.map((blog) => (
             <div key={blog._id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 py-12 border-b border-outline/30 items-stretch last:border-b-0">
               {/* Left Column: Dynamic Blog Details */}
@@ -147,7 +143,7 @@ const Home = () => {
                   </h2>
                 </Link>
                 <p className="font-sans text-xs md:text-sm text-on-surface-variant leading-relaxed max-w-lg mb-6 line-clamp-3">
-                  {blog.summary || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
+                  {blog.excerpt || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
                 </p>
                 <div className="flex items-center gap-2 text-primary">
                   <span className="font-mono text-[9px] uppercase tracking-widest font-bold">
@@ -200,7 +196,7 @@ const Home = () => {
                         </h3>
                       </Link>
                       <p className="font-sans text-xs text-on-surface-variant line-clamp-4 leading-relaxed mb-6">
-                        {blog.summary || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
+                        {blog.excerpt || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
                       </p>
                     </div>
 

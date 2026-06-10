@@ -41,14 +41,14 @@ const Navbar = () => {
 
   return (
     <header className="bg-background/90 backdrop-blur-md w-full sticky top-0 flex items-center justify-between px-6 md:px-12 h-16 border-b border-outline/50 z-50">
-      {/* Brand logo (Gold square with dark 'M', uppercase tracked text) */}
+      {/* Brand logo (Gold square with dark 'Y', uppercase tracked text) */}
       <div className="flex items-center">
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/" viewTransition className="flex items-center gap-3 group">
           <div className="bg-primary text-on-primary w-8 h-8 rounded-sm flex items-center justify-center font-black text-sm transition-transform duration-500 group-hover:scale-105">
-            M
+            Y
           </div>
           <h1 className="font-sans text-xs md:text-sm tracking-widest uppercase font-bold text-on-surface">
-            The Manuscript
+            YourSpace
           </h1>
         </Link>
       </div>
@@ -57,6 +57,7 @@ const Navbar = () => {
       <nav className="hidden md:flex gap-8 items-center h-full">
         <Link
           to="/"
+          viewTransition
           className={`font-sans text-[11px] uppercase tracking-widest transition-colors duration-300 relative py-5 h-full flex items-center ${
             isReadActive
               ? "text-on-surface font-bold border-b-2 border-primary"
@@ -69,6 +70,7 @@ const Navbar = () => {
           <>
             <Link
               to={user.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+              viewTransition
               className={`font-sans text-[11px] uppercase tracking-widest transition-colors duration-300 relative py-5 h-full flex items-center ${
                 isDashboardActive
                   ? "text-on-surface font-bold border-b-2 border-primary"
@@ -80,6 +82,7 @@ const Navbar = () => {
             {user.role !== "admin" && (
               <Link
                 to="/new-manuscript"
+                viewTransition
                 className={`font-sans text-[11px] uppercase tracking-widest transition-colors duration-300 relative py-5 h-full flex items-center ${
                   isWriteActive
                     ? "text-on-surface font-bold border-b-2 border-primary"
@@ -122,12 +125,14 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             <Link
               to="/login"
+              viewTransition
               className="font-sans text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors duration-300 px-4 py-2"
             >
               Sign In
             </Link>
             <Link
               to="/register"
+              viewTransition
               className="bg-primary border border-primary text-on-primary hover:bg-transparent hover:text-primary px-5 py-2 font-sans text-[10px] uppercase tracking-widest transition-all duration-300 font-bold"
             >
               Register
