@@ -306,13 +306,21 @@ const BlogView = () => {
                 className="w-10 h-10 rounded-full grayscale border border-outline object-cover"
               />
             ) : (
-              <span className="material-symbols-outlined text-[40px] text-on-surface-variant">
-                account_circle
-              </span>
+              <div className="w-10 h-10 rounded-full bg-surface-container-highest border border-outline flex items-center justify-center overflow-hidden">
+                <span className="material-symbols-outlined text-[40px] text-on-surface-variant leading-none">
+                  account_circle
+                </span>
+              </div>
             )}
             <div>
               <p className="font-sans text-xs font-bold text-on-surface">
-                {blog.author?.name || "Anonymous"}
+                {blog.author ? (
+                  <Link to={`/writer/${blog.author._id}`} className="hover:text-primary hover:underline transition-colors">
+                    {blog.author.name}
+                  </Link>
+                ) : (
+                  "Anonymous"
+                )}
               </p>
               <p className="font-mono text-[9px] uppercase tracking-wider text-on-surface-variant">
                 {new Date(blog.createdAt).toLocaleDateString("en-US", {
@@ -352,14 +360,25 @@ const BlogView = () => {
                 className="w-16 h-16 grayscale border border-primary object-cover rounded-sm"
               />
             ) : (
-              <span className="material-symbols-outlined text-[64px] text-on-surface-variant">
-                account_circle
-              </span>
+              <div className="w-16 h-16 bg-surface-container-highest border border-primary rounded-sm flex items-center justify-center overflow-hidden">
+                <span className="material-symbols-outlined text-[64px] text-on-surface-variant leading-none">
+                  account_circle
+                </span>
+              </div>
             )}
             <div className="text-center sm:text-left flex-1">
-              <h4 className="font-sans text-sm font-bold mb-1 text-on-surface">About the Writer</h4>
+              <h4 className="font-sans text-sm font-bold mb-1 text-on-surface">
+                About the Writer:{" "}
+                {blog.author ? (
+                  <Link to={`/writer/${blog.author._id}`} className="text-primary hover:underline transition-colors">
+                    {blog.author.name}
+                  </Link>
+                ) : (
+                  "Anonymous"
+                )}
+              </h4>
               <p className="font-sans text-xs text-on-surface-variant leading-relaxed">
-                {blog.author?.bio || `${blog.author?.name || "Anonymous"} is a contributing writer to YourSpace.`}
+                {blog.author?.bio || `${blog.author?.name || "Anonymous"} is a contributing writer to The Manuscripts.`}
               </p>
             </div>
           </div>

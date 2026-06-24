@@ -69,12 +69,12 @@ const Home = () => {
       {/* Modern Filter and Search Row - Placed at the very top */}
       <section className="mb-12 flex flex-col lg:flex-row gap-6 items-center justify-between pb-6 border-b border-outline/20">
         {/* Category Pills Navigation Row */}
-        <div className="flex gap-2 w-full lg:w-auto overflow-x-auto no-scrollbar py-2">
+        <div className="flex gap-2 w-full lg:w-auto overflow-x-auto no-scrollbar px-1 py-2">
           <button
             onClick={() => setCategory("")}
-            className={`px-4 py-2 rounded-full font-mono text-[9px] uppercase tracking-widest transition-all duration-300 whitespace-nowrap cursor-pointer border ${
+            className={`px-4 py-2 rounded-full font-mono text-[11px] uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer border ${
               category === ""
-                ? "bg-primary border-primary text-on-primary font-bold shadow-sm scale-102"
+                ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
                 : "border-outline/30 bg-surface/50 text-on-surface-variant hover:border-primary hover:text-on-surface"
             }`}
           >
@@ -84,9 +84,9 @@ const Home = () => {
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-4 py-2 rounded-full font-mono text-[9px] uppercase tracking-widest transition-all duration-300 whitespace-nowrap cursor-pointer border ${
+              className={`px-4 py-2 rounded-full font-mono text-[11px] uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer border ${
                 category === cat
-                  ? "bg-primary border-primary text-on-primary font-bold shadow-sm scale-102"
+                  ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
                   : "border-outline/30 bg-surface/50 text-on-surface-variant hover:border-primary hover:text-on-surface"
               }`}
             >
@@ -134,7 +134,7 @@ const Home = () => {
             <div key={blog._id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 py-12 border-b border-outline/30 items-stretch last:border-b-0">
               {/* Left Column: Dynamic Blog Details */}
               <header className="lg:col-span-5 flex flex-col justify-center text-left pr-0 lg:pr-6">
-                <span className="font-mono text-[10px] text-primary uppercase tracking-widest block mb-3 font-bold">
+                <span className="font-mono text-[11px] text-primary uppercase tracking-wider block mb-3 font-bold">
                   {blog.category}
                 </span>
                 <Link to={`/post/${blog.slug}`}>
@@ -146,16 +146,21 @@ const Home = () => {
                   {blog.excerpt || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
                 </p>
                 <div className="flex items-center gap-2 text-primary">
-                  <span className="font-mono text-[9px] uppercase tracking-widest font-bold">
+                  <span className="font-mono text-[11px] uppercase tracking-wider font-bold">
                     {new Date(blog.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric"
                     })}
                   </span>
-                  <span className="text-outline/40">•</span>
-                  <span className="font-mono text-[9px] uppercase tracking-widest font-bold text-on-surface-variant">
-                    By {blog.author?.name || "Anonymous"}
+                  <span className="font-mono text-[11px] uppercase tracking-wider font-bold text-on-surface-variant">
+                    By {blog.author ? (
+                      <Link to={`/writer/${blog.author._id}`} className="hover:text-primary hover:underline transition-colors">
+                        {blog.author.name}
+                      </Link>
+                    ) : (
+                      "Anonymous"
+                    )}
                   </span>
                 </div>
               </header>
@@ -174,11 +179,11 @@ const Home = () => {
                     </div>
                   ) : (
                     <div className="w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:h-full bg-gradient-to-br from-surface-container-low to-surface-container-high border-b md:border-b-0 md:border-r border-outline/40 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                      <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] bg-[radial-gradient(#c5a85c_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                      <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(#c5a85c_1px,transparent_1px)] [background-size:16px_16px]"></div>
                       <span className="font-sans text-5xl font-extrabold text-primary/10 select-none mb-1">
                         {blog.category ? blog.category.charAt(0) : "M"}
                       </span>
-                      <span className="font-mono text-[9px] uppercase tracking-widest text-primary/50 font-bold">
+                      <span className="font-mono text-[11px] uppercase tracking-wider text-primary/50 font-bold">
                         Manuscript Abstract
                       </span>
                     </div>
@@ -187,7 +192,7 @@ const Home = () => {
                   {/* Spotlight Content */}
                   <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between text-left">
                     <div>
-                      <div className="flex items-center gap-2 mb-3 font-mono text-[9px] uppercase tracking-widest text-primary font-bold">
+                      <div className="flex items-center gap-2 mb-3 font-mono text-[11px] uppercase tracking-wider text-primary font-bold">
                         <span>{blog.category}</span>
                       </div>
                       <Link to={`/post/${blog.slug}`}>
@@ -195,7 +200,7 @@ const Home = () => {
                           {blog.title}
                         </h3>
                       </Link>
-                      <p className="font-sans text-xs text-on-surface-variant line-clamp-4 leading-relaxed mb-6">
+                      <p className="font-sans text-sm text-on-surface-variant line-clamp-4 leading-relaxed mb-6">
                         {blog.excerpt || (blog.content && blog.content.replace(/<[^>]*>/g, "").substring(0, 150) + "...")}
                       </p>
                     </div>
@@ -213,11 +218,17 @@ const Home = () => {
                             account_circle
                           </span>
                         )}
-                        <span className="font-sans text-[10px] uppercase tracking-wider text-on-surface font-semibold">
-                          {blog.author?.name || "Anonymous"}
+                        <span className="font-sans text-[11px] uppercase tracking-wider text-on-surface font-semibold">
+                          {blog.author ? (
+                            <Link to={`/writer/${blog.author._id}`} className="hover:text-primary hover:underline transition-colors">
+                              {blog.author.name}
+                            </Link>
+                          ) : (
+                            "Anonymous"
+                          )}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-on-surface-variant font-mono text-[9px]">
+                      <div className="flex items-center gap-2 text-on-surface-variant font-mono text-[11px]">
                         <span className="flex items-center gap-0.5">
                           <span className="material-symbols-outlined text-xs">visibility</span>
                           {blog.views || 0}
@@ -238,17 +249,17 @@ const Home = () => {
           <button
             onClick={() => setPage((p) => Math.max(p - 1, 1))}
             disabled={page === 1}
-            className="px-5 py-2 border border-outline font-sans text-xs uppercase tracking-widest hover:border-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer bg-surface text-on-surface"
+            className="px-5 py-2 border border-outline font-sans text-xs uppercase tracking-wider hover:border-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer bg-surface text-on-surface"
           >
             Prev
           </button>
-          <span className="font-sans text-xs uppercase tracking-widest text-on-surface-variant">
+          <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant">
             Page {page} of {totalPages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
             disabled={page === totalPages}
-            className="px-5 py-2 border border-outline font-sans text-xs uppercase tracking-widest hover:border-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer bg-surface text-on-surface"
+            className="px-5 py-2 border border-outline font-sans text-xs uppercase tracking-wider hover:border-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer bg-surface text-on-surface"
           >
             Next
           </button>

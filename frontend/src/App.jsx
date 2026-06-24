@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import UserDashboard from "./pages/UserDashboard";
 import NewManuscript from "./pages/NewManuscript";
 import AdminDashboard from "./pages/AdminDashboard";
+import WriterProfile from "./pages/WriterProfile";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/post/:slug" element={<BlogView />} />
+              <Route path="/writer/:id" element={<WriterProfile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 

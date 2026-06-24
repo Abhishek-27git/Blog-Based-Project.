@@ -393,8 +393,8 @@ const UserDashboard = () => {
             </h3>
             
             {profileSuccessMsg && (
-              <div className="mb-6 p-4 bg-green-100 dark:bg-green-950/30 text-green-800 dark:text-green-400 text-xs font-sans border border-green-200 dark:border-green-800 rounded-sm flex items-center gap-2 animate-fade-in">
-                <span className="material-symbols-outlined text-[16px] text-green-700 dark:text-green-400">check_circle</span>
+              <div className="mb-6 p-4 bg-green-100 text-green-800 text-xs font-sans border border-green-200 rounded-sm flex items-center gap-2 animate-fade-in">
+                <span className="material-symbols-outlined text-[16px] text-green-700">check_circle</span>
                 <span>{profileSuccessMsg}</span>
               </div>
             )}
@@ -413,7 +413,7 @@ const UserDashboard = () => {
                   {avatarPreview ? (
                     <img src={avatarPreview} alt="Preview" className="w-full h-full object-cover grayscale" />
                   ) : (
-                    <span className="material-symbols-outlined text-[64px] text-on-surface-variant">
+                    <span className="material-symbols-outlined text-[64px] text-on-surface-variant w-full h-full flex items-center justify-center">
                       account_circle
                     </span>
                   )}

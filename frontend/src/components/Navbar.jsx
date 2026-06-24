@@ -7,24 +7,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") || "dark"
-  );
-
   useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
-    } else {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
+    document.documentElement.classList.add("light");
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }, []);
 
   if (location.pathname === "/login" || location.pathname === "/register") {
     return null;
@@ -41,14 +28,14 @@ const Navbar = () => {
 
   return (
     <header className="bg-background/90 backdrop-blur-md w-full sticky top-0 flex items-center justify-between px-6 md:px-12 h-16 border-b border-outline/50 z-50">
-      {/* Brand logo (Gold square with dark 'Y', uppercase tracked text) */}
+      {/* Brand logo (Gold square with dark 'M', uppercase tracked text) */}
       <div className="flex items-center">
         <Link to="/" viewTransition className="flex items-center gap-3 group">
           <div className="bg-primary text-on-primary w-8 h-8 rounded-sm flex items-center justify-center font-black text-sm transition-transform duration-500 group-hover:scale-105">
-            Y
+            M
           </div>
           <h1 className="font-sans text-xs md:text-sm tracking-widest uppercase font-bold text-on-surface">
-            YourSpace
+            The Manuscripts
           </h1>
         </Link>
       </div>
@@ -98,17 +85,6 @@ const Navbar = () => {
 
       {/* User Auth Section */}
       <div className="flex items-center gap-4">
-        {/* Theme Toggle Button */}
-        <button
-          onClick={toggleTheme}
-          className="text-on-surface hover:text-primary transition-colors flex items-center justify-center p-1.5 cursor-pointer rounded-full hover:bg-surface-container"
-          title="Toggle Theme"
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            {theme === "dark" ? "light_mode" : "dark_mode"}
-          </span>
-        </button>
-
         {user ? (
           <div className="flex items-center gap-4">
             <span className="font-sans text-[10px] uppercase tracking-widest text-on-surface-variant hidden sm:inline">
