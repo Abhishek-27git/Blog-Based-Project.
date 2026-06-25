@@ -9,6 +9,7 @@ const {
   toggleLikeBlog,
   toggleBookmarkBlog,
   getBookmarkedBlogs,
+  getFollowingFeed,
 } = require("../controllers/blogController");
 
 const auth = require("../middleware/auth");
@@ -23,6 +24,7 @@ router.get("/", getBlogs);
 router.get("/post/:slug", getBlogBySlug); // nested under /post/ to avoid conflicts with special routes like /my-blogs
 
 // ── Private Routes ──────────────────────────────────────────────────────────
+router.get("/feed/following", auth, getFollowingFeed);
 router.get("/my-blogs", auth, getMyBlogs);
 router.get("/bookmarks", auth, getBookmarkedBlogs);
 router.post("/", auth, upload.single("coverImage"), blogCreateRules, validate, createBlog);

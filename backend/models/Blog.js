@@ -71,6 +71,12 @@ const blogSchema = new Schema(
       type: Number,
       default: 0,
     },
+    viewsHistory: [
+      {
+        date: { type: String },
+        count: { type: Number, default: 0 }
+      }
+    ],
   },
   { timestamps: true }
 );

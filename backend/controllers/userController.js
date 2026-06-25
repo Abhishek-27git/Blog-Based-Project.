@@ -33,6 +33,8 @@ const getUserProfile = async (req, res, next) => {
         bio: user.bio,
         role: user.role,
         createdAt: user.createdAt,
+        followers: user.followers || [],
+        following: user.following || [],
       },
       blogs,
     });
@@ -87,7 +89,61 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
+// @desc    Toggle follow/unfollow a user
+// @route   PUT /api/users/:id/follow
+// @access  Private
+const toggleFollowUser = async (req, res, next) => {
+  try {
+    const targetUserId = req.params.id;
+    const currentUserId = req.user._id;
+
+    if (targetUserId === currentUserId.toString()) {
+      return next(new ApiError(400, "You cannot follow yourself."));
+    }
+
+    const targetUser = await User.findById(targetUserId);
+    const currentUser = await User.findById(currentUserId);
+
+    if (!targetUser || !currentUser) {
+      return next(new ApiError(404, "User not found."));
+    }
+
+    // Initialize arrays if they don't exist
+    if (!currentUser.following) currentUser.following = [];
+    if (!targetUser.followers) targetUser.followers = [];
+
+    const isFollowing = currentUser.following.includes(targetUserId);
+
+    if (isFollowing) {
+      // Unfollow
+      currentUser.following = currentUser.following.filter(
+        (id) => id.toString() !== targetUserId
+      );
+      targetUser.followers = targetUser.followers.filter(
+        (id) => id.toString() !== currentUserId.toString()
+      );
+    } else {
+      // Follow
+      currentUser.following.push(targetUserId);
+      targetUser.followers.push(currentUserId);
+    }
+
+    await currentUser.save();
+    await targetUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: isFollowing ? "Unfollowed successfully." : "Followed successfully.",
+      isFollowing: !isFollowing,
+      currentUserProfile: currentUser.toPublicProfile(),
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
+  toggleFollowUser,
 };

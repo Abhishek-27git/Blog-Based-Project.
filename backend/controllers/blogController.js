@@ -172,17 +172,32 @@ const getMyBlogs = async (req, res, next) => {
 const getBlogBySlug = async (req, res, next) => {
   try {
     const { slug } = req.params;
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-    // Find and increment view count atomically
-    const blog = await Blog.findOneAndUpdate(
-      { slug, status: "published" },
-      { $inc: { views: 1 } },
-      { new: true }
-    ).populate("author", "name email avatar bio");
-
+    // Find and update blog
+    let blog = await Blog.findOne({ slug, status: "published" });
     if (!blog) {
       return next(new ApiError(404, "Blog not found or is still a draft."));
     }
+
+    blog.views = (blog.views || 0) + 1;
+
+    // Log daily view counts
+    if (!blog.viewsHistory) blog.viewsHistory = [];
+    const dateIndex = blog.viewsHistory.findIndex((h) => h.date === today);
+    if (dateIndex === -1) {
+      blog.viewsHistory.push({ date: today, count: 1 });
+    } else {
+      blog.viewsHistory[dateIndex].count += 1;
+    }
+
+    // Keep history trimmed to the last 30 days
+    if (blog.viewsHistory.length > 30) {
+      blog.viewsHistory = blog.viewsHistory.slice(-30);
+    }
+
+    await blog.save();
+    blog = await blog.populate("author", "name email avatar bio");
 
     res.status(200).json({
       success: true,
@@ -402,6 +417,61 @@ const getBookmarkedBlogs = async (req, res, next) => {
   }
 };
 
+// @desc    Get published blogs from authors the current user follows
+// @route   GET /api/blogs/feed/following
+// @access  Private (User/Admin)
+const getFollowingFeed = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    const User = require("../models/User");
+    const currentUser = await User.findById(req.user._id);
+
+    if (!currentUser || !currentUser.following || currentUser.following.length === 0) {
+      return res.status(200).json({
+        success: true,
+        count: 0,
+        pagination: {
+          page,
+          limit,
+          totalPages: 0,
+          totalBlogs: 0,
+        },
+        blogs: [],
+      });
+    }
+
+    const query = {
+      author: { $in: currentUser.following },
+      status: "published",
+    };
+
+    const blogs = await Blog.find(query)
+      .populate("author", "name email avatar bio")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Blog.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      count: blogs.length,
+      pagination: {
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        totalBlogs: total,
+      },
+      blogs,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createBlog,
   getBlogs,
@@ -412,4 +482,5 @@ module.exports = {
   toggleLikeBlog,
   toggleBookmarkBlog,
   getBookmarkedBlogs,
+  getFollowingFeed,
 };

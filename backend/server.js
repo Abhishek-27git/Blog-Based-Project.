@@ -37,6 +37,7 @@ app.use("/api/auth",  require("./routes/authRoutes"));
 app.use("/api/blogs", require("./routes/blogRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/collections", require("./routes/collectionRoutes"));
 
 // ── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res, next) => {

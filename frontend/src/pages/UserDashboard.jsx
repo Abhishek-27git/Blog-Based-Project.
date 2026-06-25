@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 import { DashboardSkeleton } from "../components/Skeleton";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
 const UserDashboard = () => {
   const { user, updateUserProfileState } = useAuth();
@@ -102,6 +103,46 @@ const UserDashboard = () => {
 
   // Sum of views on published blogs
   const totalViews = publishedBlogs.reduce((sum, b) => sum + (b.views || 0), 0);
+
+  // Aggregate daily view history across all manuscripts
+  const getAnalyticsData = () => {
+    const dailyViewsMap = {};
+
+    // Initialize last 30 days with 0 views so the chart is populated even with no views
+    const dates = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateString = d.toISOString().split("T")[0]; // YYYY-MM-DD
+      dates.push(dateString);
+      dailyViewsMap[dateString] = 0;
+    }
+
+    publishedBlogs.forEach((blog) => {
+      if (blog.viewsHistory && Array.isArray(blog.viewsHistory)) {
+        blog.viewsHistory.forEach((item) => {
+          const formattedDate = item.date; // YYYY-MM-DD
+          // Only add if it's within our 30-day window
+          if (dailyViewsMap[formattedDate] !== undefined) {
+            dailyViewsMap[formattedDate] += item.count || 0;
+          }
+        });
+      }
+    });
+
+    // Convert map to sorted array of objects for Recharts
+    const data = Object.keys(dailyViewsMap)
+      .sort()
+      .map((date) => {
+        const [_, month, day] = new Date(date + "T00:00:00").toDateString().split(" ");
+        return {
+          date: `${month} ${day}`,
+          Views: dailyViewsMap[date],
+        };
+      });
+
+    return data;
+  };
 
   if (loading) {
     return <DashboardSkeleton />;
@@ -208,6 +249,53 @@ const UserDashboard = () => {
                 </h2>
               </div>
             </section>
+
+            {/* Analytics Section */}
+            {publishedBlogs.length > 0 && (
+              <section className="mb-12 border border-outline bg-surface rounded-sm p-6 text-left animate-fade-in-up">
+                <h3 className="font-sans text-xs font-bold text-on-surface uppercase tracking-wider mb-6 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary text-base">monitoring</span>
+                  <span>Writers View Analytics (Last 30 Days)</span>
+                </h3>
+                <div className="w-full h-64 font-sans text-xs">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={getAnalyticsData()}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-outline-variant)" />
+                      <XAxis
+                        dataKey="date"
+                        stroke="var(--color-on-surface-variant)"
+                        fontSize={10}
+                        tickLine={false}
+                      />
+                      <YAxis
+                        stroke="var(--color-on-surface-variant)"
+                        fontSize={10}
+                        tickLine={false}
+                        allowDecimals={false}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--color-surface)",
+                          borderColor: "var(--color-outline)",
+                          color: "var(--color-on-surface)",
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "11px",
+                          borderRadius: "2px",
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="Views"
+                        stroke="var(--color-primary)"
+                        strokeWidth={2}
+                        dot={{ r: 3, strokeWidth: 1, fill: "var(--color-background)" }}
+                        activeDot={{ r: 5 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </section>
+            )}
 
             {/* Header Title with clean buttons */}
             <div className="flex justify-between items-center mb-10 pb-4 border-b border-outline/20">

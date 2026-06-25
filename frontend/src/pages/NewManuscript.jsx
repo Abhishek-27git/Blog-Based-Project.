@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../utils/api";
 import { NewManuscriptSkeleton } from "../components/Skeleton";
+import { marked } from "marked";
 
 const NewManuscript = () => {
   const navigate = useNavigate();
@@ -28,6 +29,37 @@ const NewManuscript = () => {
   const [autosaveStatus, setAutosaveStatus] = useState("saved"); // saved, saving, typing, error
   const [hasChanges, setHasChanges] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
+
+  // Markdown Editor & Writing Goal States
+  const [activeEditorTab, setActiveEditorTab] = useState("edit");
+  const [wordGoal, setWordGoal] = useState(500);
+  const textareaRef = useRef(null);
+
+  const insertFormatting = (prefix, suffix = "") => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selectedText = text.substring(start, end);
+    const replacement = prefix + selectedText + suffix;
+
+    setContent(
+      text.substring(0, start) +
+      replacement +
+      text.substring(end)
+    );
+
+    // Maintain focus and reset selection
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(
+        start + prefix.length,
+        start + prefix.length + selectedText.length
+      );
+    }, 0);
+  };
 
   const categories = [
     "Philosophy",
@@ -321,9 +353,49 @@ const NewManuscript = () => {
               By {localStorage.getItem("userName") || "You"}
             </span>
             <span className="text-outline">•</span>
-            <span className="font-mono text-[9px] uppercase tracking-widest text-primary font-bold">
-              {wordCount} words
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[9px] uppercase tracking-wider text-primary font-bold">
+                {wordCount} words
+              </span>
+              {!focusMode && (
+                <>
+                  <span className="text-outline">•</span>
+                  <div className="flex items-center gap-1.5 font-mono text-[9px]">
+                    <span className="uppercase text-on-surface-variant/70">Goal:</span>
+                    <input
+                      type="number"
+                      value={wordGoal}
+                      onChange={(e) => setWordGoal(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                      className="w-12 bg-surface border border-outline/50 rounded px-1 text-center py-0.5 outline-none focus:border-primary text-[9px] font-bold text-on-surface"
+                    />
+                  </div>
+                  {wordGoal > 0 && (
+                    <div className="relative flex items-center justify-center ml-1" title={`${Math.round(Math.min((wordCount / wordGoal) * 100, 100))}% of writing goal`}>
+                      <svg className="w-5 h-5 transform -rotate-90">
+                        <circle cx="10" cy="10" r="8" className="text-outline/25" strokeWidth="2" stroke="currentColor" fill="transparent" />
+                        <circle
+                          cx="10"
+                          cy="10"
+                          r="8"
+                          className="text-primary transition-all duration-300"
+                          strokeWidth="2"
+                          strokeDasharray={2 * Math.PI * 8}
+                          strokeDashoffset={2 * Math.PI * 8 - (Math.min((wordCount / wordGoal) * 100, 100) / 100) * 2 * Math.PI * 8}
+                          strokeLinecap="round"
+                          stroke="currentColor"
+                          fill="transparent"
+                        />
+                      </svg>
+                      {wordCount >= wordGoal && (
+                        <span className="material-symbols-outlined text-[10px] text-green-600 absolute font-bold animate-pulse">
+                          check
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
           <hr className={`mt-4 border-t border-outline/30 focus-transition ${
             focusMode ? "opacity-0 border-transparent h-0 my-0" : ""
@@ -404,22 +476,117 @@ const NewManuscript = () => {
 
         {/* Content Editor */}
         <section className={`writing-canvas focus-transition ${focusMode ? "mt-4" : ""}`}>
-          <label className={`block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold focus-transition ${
-            focusMode ? "opacity-0 h-0 overflow-hidden pointer-events-none mb-0" : ""
+          <div className={`flex items-center justify-between border-b border-outline/30 pb-2 mb-4 focus-transition ${
+            focusMode ? "opacity-0 h-0 overflow-hidden pointer-events-none mb-0 pb-0" : ""
           }`}>
-            Content Body (Supports plain text or HTML syntax)
-          </label>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="The first sentence is the hardest..."
-            className={`w-full min-h-[500px] focus-transition outline-none resize-y rounded-sm ${
-              focusMode
-                ? "bg-transparent border-none text-on-surface font-serif text-lg md:text-xl leading-loose max-w-2xl mx-auto block placeholder:italic placeholder:text-on-surface-variant/20 shadow-none focus:ring-0"
-                : "bg-background border border-outline focus:border-primary p-6 text-on-surface-variant font-sans text-base leading-relaxed"
-            }`}
-            required
-          />
+            <label className="block font-sans text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">
+              Content Body (Markdown Supported)
+            </label>
+            <div className="flex border border-outline rounded overflow-hidden text-[9px] font-mono">
+              <button
+                type="button"
+                onClick={() => setActiveEditorTab("edit")}
+                className={`px-3 py-1 cursor-pointer font-bold uppercase transition-all ${
+                  activeEditorTab === "edit" ? "bg-primary text-on-primary" : "bg-surface hover:bg-surface-container"
+                }`}
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveEditorTab("preview")}
+                className={`px-3 py-1 cursor-pointer font-bold uppercase transition-all ${
+                  activeEditorTab === "preview" ? "bg-primary text-on-primary" : "bg-surface hover:bg-surface-container"
+                }`}
+              >
+                Preview
+              </button>
+            </div>
+          </div>
+
+          {/* Formatting Toolbar */}
+          {!focusMode && activeEditorTab === "edit" && (
+            <div className="flex flex-wrap gap-1 mb-3 bg-surface p-1 border border-outline rounded-sm items-center shadow-xs">
+              <button
+                type="button"
+                onClick={() => insertFormatting("**", "**")}
+                className="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                title="Bold"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">format_bold</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormatting("*", "*")}
+                className="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                title="Italic"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">format_italic</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormatting("### ")}
+                className="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                title="Header"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">title</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormatting("> ")}
+                className="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                title="Blockquote"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">format_quote</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormatting("```\n", "\n```")}
+                className="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                title="Code Block"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">code</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormatting("[", "](url)")}
+                className="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                title="Link"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">link</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormatting("- ")}
+                className="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                title="Bullet List"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">format_list_bulleted</span>
+              </button>
+            </div>
+          )}
+
+          {activeEditorTab === "edit" ? (
+            <textarea
+              ref={textareaRef}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="The first sentence is the hardest..."
+              className={`w-full min-h-[500px] focus-transition outline-none resize-y rounded-sm ${
+                focusMode
+                  ? "bg-transparent border-none text-on-surface font-serif text-lg md:text-xl leading-loose max-w-2xl mx-auto block placeholder:italic placeholder:text-on-surface-variant/20 shadow-none focus:ring-0"
+                  : "bg-background border border-outline focus:border-primary p-6 text-on-surface-variant font-sans text-base leading-relaxed"
+              }`}
+              required
+            />
+          ) : (
+            <div
+              className="w-full min-h-[500px] bg-background border border-outline p-8 text-on-surface-variant font-sans text-base leading-relaxed overflow-y-auto rounded-sm essay-content"
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(content || "*No content written yet.*"),
+              }}
+            />
+          )}
         </section>
 
         {/* Break ornament */}

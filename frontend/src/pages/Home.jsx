@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../utils/api";
 import { BlogStackedListSkeleton } from "../components/Skeleton";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
   if (new URLSearchParams(window.location.search).get("trigger_error") === "true") {
     throw new Error("Simulated rendering crash for verification of React Error Boundary.");
   }
 
+  const { user } = useAuth();
   const [blogs, setBlogs] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [feedMode, setFeedMode] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -30,36 +33,49 @@ const Home = () => {
   const fetchBlogs = async () => {
     setLoading(true);
     try {
-      const response = await api.get("/blogs", {
-        params: {
-          search,
-          category,
-          page,
-          limit: 9, // Fit 3x3 grid perfectly if pages fill up
-        },
-      });
+      let response;
+      if (feedMode) {
+        response = await api.get("/blogs/feed/following", {
+          params: {
+            page,
+            limit: 9,
+          },
+        });
+      } else {
+        response = await api.get("/blogs", {
+          params: {
+            search,
+            category,
+            page,
+            limit: 9, // Fit 3x3 grid perfectly if pages fill up
+          },
+        });
+      }
       if (response.data && response.data.success) {
         setBlogs(response.data.blogs);
         setTotalPages(response.data.pagination.totalPages);
       }
     } catch (err) {
       console.error("Error loading essays:", err);
+      setBlogs([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Reset page to 1 on category changes
+    // Reset page to 1 on category/feedMode changes
     setPage(1);
-  }, [category]);
+  }, [category, feedMode]);
 
   useEffect(() => {
     fetchBlogs();
-  }, [page, category]);
+  }, [page, category, feedMode]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+    setFeedMode(false);
     fetchBlogs();
   };
 
@@ -70,10 +86,29 @@ const Home = () => {
       <section className="mb-12 flex flex-col lg:flex-row gap-6 items-center justify-between pb-6 border-b border-outline/20">
         {/* Category Pills Navigation Row */}
         <div className="flex gap-2 w-full lg:w-auto overflow-x-auto no-scrollbar px-1 py-2">
+          {user && (
+            <button
+              onClick={() => {
+                setFeedMode(true);
+                setCategory("");
+                setSearch("");
+              }}
+              className={`px-4 py-2 rounded-full font-mono text-[11px] uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer border ${
+                feedMode
+                  ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
+                  : "border-outline/30 bg-surface/50 text-on-surface-variant hover:border-primary hover:text-on-surface"
+              }`}
+            >
+              Following Feed
+            </button>
+          )}
           <button
-            onClick={() => setCategory("")}
+            onClick={() => {
+              setCategory("");
+              setFeedMode(false);
+            }}
             className={`px-4 py-2 rounded-full font-mono text-[11px] uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer border ${
-              category === ""
+              category === "" && !feedMode
                 ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
                 : "border-outline/30 bg-surface/50 text-on-surface-variant hover:border-primary hover:text-on-surface"
             }`}
@@ -83,9 +118,12 @@ const Home = () => {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setCategory(cat)}
+              onClick={() => {
+                setCategory(cat);
+                setFeedMode(false);
+              }}
               className={`px-4 py-2 rounded-full font-mono text-[11px] uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer border ${
-                category === cat
+                category === cat && !feedMode
                   ? "bg-primary border-primary text-on-primary font-bold shadow-sm"
                   : "border-outline/30 bg-surface/50 text-on-surface-variant hover:border-primary hover:text-on-surface"
               }`}

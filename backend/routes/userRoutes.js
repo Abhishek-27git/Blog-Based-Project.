@@ -1,5 +1,5 @@
 const express = require("express");
-const { getUserProfile, updateUserProfile } = require("../controllers/userController");
+const { getUserProfile, updateUserProfile, toggleFollowUser } = require("../controllers/userController");
 
 const auth = require("../middleware/auth");
 const upload = require("../middleware/upload");
@@ -11,5 +11,6 @@ router.get("/profile/:id", getUserProfile);
 
 // ── Private Routes ──────────────────────────────────────────────────────────
 router.put("/profile", auth, upload.single("avatar"), updateUserProfile);
+router.put("/:id/follow", auth, toggleFollowUser);
 
 module.exports = router;
